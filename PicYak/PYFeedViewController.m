@@ -5,6 +5,7 @@
 //  Created by Rebecca Mignone on 6/28/14.
 //  Copyright (c) 2014 Mignone. All rights reserved.
 //
+#import <Parse/Parse.h>
 #import "PostTableViewCell.h"
 #import "PYFeedViewController.h"
 
@@ -49,13 +50,14 @@
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        picker.showsCameraControls = YES;
+        picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
     } else {
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
-    picker.showsCameraControls = YES;
     picker.delegate = self;
     picker.allowsEditing = YES;
-    picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+
     [self presentViewController:picker animated:YES completion:NULL];
 }
 - (void)didReceiveMemoryWarning
@@ -100,6 +102,40 @@
     UIImage *photo = info[UIImagePickerControllerEditedImage];
     
     // Launch post view controller here
+    NSData *imageData = UIImageJPEGRepresentation(photo, .05f);
+    PFFile *imageFile = [PFFile fileWithName:@"PostPicture.jpg" data:imageData];
+    
+    //HUD creation here (see example for code)
+    
+    // Save PFFile
+    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            // Hide old HUD, show completed HUD (see example for code)
+            
+            // Create a PFObject around a PFFile and associate it with the current user
+            PFObject *userPhoto = [PFObject objectWithClassName:@"Post"];
+            [userPhoto setObject:imageFile forKey:@"picture"];
+            [userPhoto saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (!error) {
+                    //code for successful save
+                }
+                else{
+                    // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                }
+            }];
+        }
+        else{
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    } progressBlock:^(int percentDone) {
+        // Update your progress spinner here. percentDone will be between 0 and 100.
+    }];
+
+    
+    
+    
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
