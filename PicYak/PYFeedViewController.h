@@ -11,6 +11,6 @@
 
 @interface PYFeedViewController : UITableViewController <UIImagePickerControllerDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate>
 
-
+@property (nonatomic,strong) NSMutableArray *allPosts;
 
 @end

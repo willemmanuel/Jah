@@ -34,6 +34,7 @@
 		7233CCEB195FD12300B5289D /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCEA195FD12300B5289D /* Twitter.framework */; };
 		7233CCEF195FD12300B5289D /* PYFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCEE195FD12300B5289D /* PYFeedViewController.m */; };
 		7233CCF2195FD12300B5289D /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF1195FD12300B5289D /* PostTableViewCell.m */; };
+		7233CCF5195FD20800B5289D /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF4195FD20800B5289D /* Post.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,8 @@
 		7233CCEE195FD12300B5289D /* PYFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYFeedViewController.m; sourceTree = "<group>"; };
 		7233CCF0195FD12300B5289D /* PostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostTableViewCell.h; path = ../PostTableViewCell.h; sourceTree = "<group>"; };
 		7233CCF1195FD12300B5289D /* PostTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostTableViewCell.m; path = ../PostTableViewCell.m; sourceTree = "<group>"; };
+		7233CCF3195FD20800B5289D /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Post.h; path = ../Post.h; sourceTree = "<group>"; };
+		7233CCF4195FD20800B5289D /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Post.m; path = ../Post.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +174,8 @@
 				7233CCEE195FD12300B5289D /* PYFeedViewController.m */,
 				7233CCF0195FD12300B5289D /* PostTableViewCell.h */,
 				7233CCF1195FD12300B5289D /* PostTableViewCell.m */,
+				7233CCF3195FD20800B5289D /* Post.h */,
+				7233CCF4195FD20800B5289D /* Post.m */,
 				7233CCA6195FD12300B5289D /* Supporting Files */,
 			);
 			path = PicYak;
@@ -302,6 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7233CCF5195FD20800B5289D /* Post.m in Sources */,
 				7233CCB0195FD12300B5289D /* AppDelegate.m in Sources */,
 				7233CCEF195FD12300B5289D /* PYFeedViewController.m in Sources */,
 				7233CCAC195FD12300B5289D /* main.m in Sources */,

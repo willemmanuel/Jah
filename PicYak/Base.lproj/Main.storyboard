@@ -43,6 +43,9 @@
                                             <state key="normal">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="upvotePressed:" destination="yQx-0Z-4ne" eventType="touchUpInside" id="4VA-dY-4Xh"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S1B-RJ-gvw">
                                             <rect key="frame" x="29" y="58" width="22" height="30"/>
@@ -51,12 +54,24 @@
                                             <state key="normal">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="downvotePressed:" destination="yQx-0Z-4ne" eventType="touchUpInside" id="heA-Qm-Cqs"/>
+                                            </connections>
                                         </button>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nEp-qy-l0k">
+                                            <rect key="frame" x="20" y="112" width="45" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="caption" destination="zxS-lS-ALd" id="C5Y-aa-klC"/>
                                     <outlet property="downvoteButton" destination="S1B-RJ-gvw" id="JBZ-Uk-KO6"/>
                                     <outlet property="picture" destination="Qbz-cK-UHi" id="4yn-DR-Ujy"/>
+                                    <outlet property="score" destination="nEp-qy-l0k" id="HHh-hX-pCk"/>
                                     <outlet property="upvoteButton" destination="wgg-I6-ml4" id="uCN-Qd-z8L"/>
                                 </connections>
                             </tableViewCell>
