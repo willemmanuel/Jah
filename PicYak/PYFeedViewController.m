@@ -39,7 +39,17 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 - (IBAction)newPost:(id)sender{
-    
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    } else {
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    picker.showsCameraControls = YES;
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+    [self presentViewController:picker animated:YES completion:NULL];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -76,6 +86,20 @@
     return cell;
 
 }
+
+# pragma mark - UIImagePickerControllerDelegate methods
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UIImage *photo = info[UIImagePickerControllerEditedImage];
+    
+    // Launch post view controller here
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
 
 
 /*

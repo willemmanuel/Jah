@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PYFeedViewController : UITableViewController
+@interface PYFeedViewController : UITableViewController <UIImagePickerControllerDelegate>
 
 
 
