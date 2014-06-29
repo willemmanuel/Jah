@@ -10,6 +10,7 @@
 
 @interface Post : NSObject
 
+@property (nonatomic, strong) PFObject *post;
 @property (nonatomic,strong) NSDate *createdAt;
 @property (nonatomic,strong) UIImage *picture;
 @property (nonatomic,strong) NSString *caption;

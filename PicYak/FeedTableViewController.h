@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "PostTableViewCell.h"
+#import "Post.h"
 
-@interface PYFeedViewController : UITableViewController <PostTableViewCellDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate>
+@interface FeedTableViewController : UITableViewController <PostTableViewCellDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic,strong) NSMutableArray *allPosts;
 
