@@ -14,13 +14,24 @@
 		7233CCAC195FD12300B5289D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCAB195FD12300B5289D /* main.m */; };
 		7233CCB0195FD12300B5289D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCAF195FD12300B5289D /* AppDelegate.m */; };
 		7233CCB3195FD12300B5289D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7233CCB1195FD12300B5289D /* Main.storyboard */; };
-		7233CCB6195FD12300B5289D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCB5195FD12300B5289D /* ViewController.m */; };
 		7233CCB8195FD12300B5289D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7233CCB7195FD12300B5289D /* Images.xcassets */; };
 		7233CCBF195FD12300B5289D /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCBE195FD12300B5289D /* XCTest.framework */; };
 		7233CCC0195FD12300B5289D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CC9F195FD12300B5289D /* Foundation.framework */; };
 		7233CCC1195FD12300B5289D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCA3195FD12300B5289D /* UIKit.framework */; };
 		7233CCC9195FD12300B5289D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7233CCC7195FD12300B5289D /* InfoPlist.strings */; };
 		7233CCCB195FD12300B5289D /* PicYakTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCCA195FD12300B5289D /* PicYakTests.m */; };
+		7233CCD5195FD12300B5289D /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCD4195FD12300B5289D /* Parse.framework */; };
+		7233CCD7195FD12300B5289D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCD6195FD12300B5289D /* AudioToolbox.framework */; };
+		7233CCD9195FD12300B5289D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCD8195FD12300B5289D /* CFNetwork.framework */; };
+		7233CCDB195FD12300B5289D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCDA195FD12300B5289D /* CoreLocation.framework */; };
+		7233CCDD195FD12300B5289D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCDC195FD12300B5289D /* libz.dylib */; };
+		7233CCDF195FD12300B5289D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCDE195FD12300B5289D /* MobileCoreServices.framework */; };
+		7233CCE1195FD12300B5289D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE0195FD12300B5289D /* QuartzCore.framework */; };
+		7233CCE3195FD12300B5289D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE2195FD12300B5289D /* Security.framework */; };
+		7233CCE5195FD12300B5289D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE4195FD12300B5289D /* StoreKit.framework */; };
+		7233CCE7195FD12300B5289D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE6195FD12300B5289D /* SystemConfiguration.framework */; };
+		7233CCE9195FD12300B5289D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE8195FD12300B5289D /* Social.framework */; };
+		7233CCEB195FD12300B5289D /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCEA195FD12300B5289D /* Twitter.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,14 +56,24 @@
 		7233CCAE195FD12300B5289D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7233CCAF195FD12300B5289D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		7233CCB2195FD12300B5289D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		7233CCB4195FD12300B5289D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		7233CCB5195FD12300B5289D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		7233CCB7195FD12300B5289D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7233CCBD195FD12300B5289D /* PicYakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PicYakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7233CCBE195FD12300B5289D /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		7233CCC6195FD12300B5289D /* PicYakTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PicYakTests-Info.plist"; sourceTree = "<group>"; };
 		7233CCC8195FD12300B5289D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7233CCCA195FD12300B5289D /* PicYakTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PicYakTests.m; sourceTree = "<group>"; };
+		7233CCD4195FD12300B5289D /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = PicYak/Parse.framework; sourceTree = "<group>"; };
+		7233CCD6195FD12300B5289D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		7233CCD8195FD12300B5289D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		7233CCDA195FD12300B5289D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		7233CCDC195FD12300B5289D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		7233CCDE195FD12300B5289D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		7233CCE0195FD12300B5289D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7233CCE2195FD12300B5289D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		7233CCE4195FD12300B5289D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		7233CCE6195FD12300B5289D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7233CCE8195FD12300B5289D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		7233CCEA195FD12300B5289D /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +81,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7233CCEB195FD12300B5289D /* Twitter.framework in Frameworks */,
+				7233CCE9195FD12300B5289D /* Social.framework in Frameworks */,
+				7233CCE7195FD12300B5289D /* SystemConfiguration.framework in Frameworks */,
+				7233CCE5195FD12300B5289D /* StoreKit.framework in Frameworks */,
+				7233CCE3195FD12300B5289D /* Security.framework in Frameworks */,
+				7233CCE1195FD12300B5289D /* QuartzCore.framework in Frameworks */,
+				7233CCDF195FD12300B5289D /* MobileCoreServices.framework in Frameworks */,
+				7233CCDD195FD12300B5289D /* libz.dylib in Frameworks */,
+				7233CCDB195FD12300B5289D /* CoreLocation.framework in Frameworks */,
 				7233CCA2195FD12300B5289D /* CoreGraphics.framework in Frameworks */,
+				7233CCD9195FD12300B5289D /* CFNetwork.framework in Frameworks */,
+				7233CCD7195FD12300B5289D /* AudioToolbox.framework in Frameworks */,
 				7233CCA4195FD12300B5289D /* UIKit.framework in Frameworks */,
+				7233CCD5195FD12300B5289D /* Parse.framework in Frameworks */,
 				7233CCA0195FD12300B5289D /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +134,18 @@
 		7233CC9E195FD12300B5289D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7233CCEA195FD12300B5289D /* Twitter.framework */,
+				7233CCE8195FD12300B5289D /* Social.framework */,
+				7233CCE6195FD12300B5289D /* SystemConfiguration.framework */,
+				7233CCE4195FD12300B5289D /* StoreKit.framework */,
+				7233CCE2195FD12300B5289D /* Security.framework */,
+				7233CCE0195FD12300B5289D /* QuartzCore.framework */,
+				7233CCDE195FD12300B5289D /* MobileCoreServices.framework */,
+				7233CCDC195FD12300B5289D /* libz.dylib */,
+				7233CCDA195FD12300B5289D /* CoreLocation.framework */,
+				7233CCD8195FD12300B5289D /* CFNetwork.framework */,
+				7233CCD6195FD12300B5289D /* AudioToolbox.framework */,
+				7233CCD4195FD12300B5289D /* Parse.framework */,
 				7233CC9F195FD12300B5289D /* Foundation.framework */,
 				7233CCA1195FD12300B5289D /* CoreGraphics.framework */,
 				7233CCA3195FD12300B5289D /* UIKit.framework */,
@@ -115,8 +160,6 @@
 				7233CCAE195FD12300B5289D /* AppDelegate.h */,
 				7233CCAF195FD12300B5289D /* AppDelegate.m */,
 				7233CCB1195FD12300B5289D /* Main.storyboard */,
-				7233CCB4195FD12300B5289D /* ViewController.h */,
-				7233CCB5195FD12300B5289D /* ViewController.m */,
 				7233CCB7195FD12300B5289D /* Images.xcassets */,
 				7233CCA6195FD12300B5289D /* Supporting Files */,
 			);
@@ -249,7 +292,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7233CCB6195FD12300B5289D /* ViewController.m in Sources */,
 				7233CCB0195FD12300B5289D /* AppDelegate.m in Sources */,
 				7233CCAC195FD12300B5289D /* main.m in Sources */,
 			);
@@ -376,6 +418,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PicYak",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PicYak/PicYak-Prefix.pch";
 				INFOPLIST_FILE = "PicYak/PicYak-Info.plist";
@@ -389,6 +435,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PicYak",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PicYak/PicYak-Prefix.pch";
 				INFOPLIST_FILE = "PicYak/PicYak-Info.plist";

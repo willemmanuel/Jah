@@ -5,7 +5,7 @@
 //  Created by Rebecca Mignone on 6/28/14.
 //  Copyright (c) 2014 Mignone. All rights reserved.
 //
-
+#import "Parse/Parse.h"
 #import "AppDelegate.h"
 
 @implementation AppDelegate
@@ -13,6 +13,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [Parse setApplicationId:@"pGr2XyaZME9w8C6hhesArEwDYSpObQ7zcteKAAQp"
+                  clientKey:@"olINIcgamr5hMJiwYp5yMgRhZEbuUlzhVOwaJ3Li"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     return YES;
 }
 							
