@@ -39,22 +39,27 @@
 
 
 -(void)loadComments {
+    if(!self.refreshControl.isRefreshing){
     [comments removeAllObjects];
     PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-    query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+    //query.cachePolicy = kPFCachePolicyCacheThenNetwork;
     [query orderByAscending:@"createdAt"];
     [query whereKey:@"postId" equalTo:self.post.post];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (error) {
             NSLog(@"Something went wrong with the comments query. We should probably do something here");
         } else {
+    //NSArray *objects = [query findObjects];
             for (PFObject *object in objects) {
+                NSLog(@"%@", object[@"comment"]);
                 Comment *newComment = [[Comment alloc] initWithObject:object];
                 [comments addObject:newComment];
+                [self.tableView reloadData];
             }
         }
-        [self.tableView reloadData];
+        
     }];
+    }
 }
 
 
@@ -77,11 +82,11 @@
     if (cell == nil) {
         cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    
-    Comment *currentComment = [comments objectAtIndex:indexPath.row];
-    [cell.comment setText: currentComment.comment];
-    cell.score.text = [NSString stringWithFormat:@"%d", currentComment.score];
-    cell.commentId = currentComment.commentId;
+        Comment *currentComment = [comments objectAtIndex:indexPath.row];
+        [cell.comment setText: currentComment.comment];
+        cell.score.text = [NSString stringWithFormat:@"%d", currentComment.score];
+        cell.commentId = currentComment.commentId;
+   
     return cell;
 }
 

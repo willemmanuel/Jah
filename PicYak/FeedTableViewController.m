@@ -36,7 +36,6 @@
 {
     [super viewDidLoad];
     uniqueDeviceIdentifier = [UIDevice currentDevice].identifierForVendor.UUIDString;
-    NSLog(@"%%%%%%%%%%%%%@", uniqueDeviceIdentifier);
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc]init];
     [refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
@@ -53,6 +52,12 @@
     UIBarButtonItem *takePicture = [[UIBarButtonItem alloc]initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(newPost:)];
     self.navigationItem.rightBarButtonItem = takePicture;
 }
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    
+}
+
 - (IBAction)newPost:(id)sender{
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -166,6 +171,7 @@
 
 - (void)refreshTable
 {
+    [locationManager startUpdatingLocation];
     [self queryForAllPostsNearLocation];
     [self.refreshControl endRefreshing];
 }
