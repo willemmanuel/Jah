@@ -10,6 +10,7 @@
 
 @interface PYFeedViewController (){
     NSMutableArray *posts;
+    CLLocationManager *locationManager;
 }
 
 @end
@@ -30,6 +31,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    locationManager.distanceFilter = kCLDistanceFilterNone;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [locationManager startUpdatingLocation];
+    
     UIBarButtonItem *takePicture = [[UIBarButtonItem alloc]initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(newPost:)];
     self.navigationItem.rightBarButtonItem = takePicture;
     // Uncomment the following line to preserve selection between presentations.
@@ -100,7 +107,12 @@
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
+# pragma mark - CLLocationManagerDelegate methods
 
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    CLLocation *location = [locations lastObject];
+    NSLog(@"lat%f - lon%f", location.coordinate.latitude, location.coordinate.longitude);
+}
 
 /*
 // Override to support conditional editing of the table view.

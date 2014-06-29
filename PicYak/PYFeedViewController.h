@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface PYFeedViewController : UITableViewController <UIImagePickerControllerDelegate>
+@interface PYFeedViewController : UITableViewController <UIImagePickerControllerDelegate, CLLocationManagerDelegate>
 
 
 
