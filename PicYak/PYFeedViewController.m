@@ -13,6 +13,7 @@
     NSMutableArray *posts;
     CLLocationManager *locationManager;
     CLLocation *currentLocation;
+    NSString *uniqueDeviceIdentifier;
 }
 
 @end
@@ -33,25 +34,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc]
-                                        init];
+    uniqueDeviceIdentifier = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    NSLog(@"%%%%%%%%%%%%%@", uniqueDeviceIdentifier);
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc]init];
     [refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     
     self.allPosts =[[NSMutableArray alloc] init];
     locationManager = [[CLLocationManager alloc] init];
+    
     locationManager.delegate = self;
     locationManager.distanceFilter = kCLDistanceFilterNone;
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
     [self queryForAllPostsNearLocation];
+    
     UIBarButtonItem *takePicture = [[UIBarButtonItem alloc]initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(newPost:)];
     self.navigationItem.rightBarButtonItem = takePicture;
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 - (IBAction)newPost:(id)sender{
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
