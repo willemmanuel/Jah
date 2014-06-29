@@ -24,31 +24,36 @@
     // Initialization code
 }
 - (IBAction)upvotePressed:(id)sender {
-    NSLog(@"%@", self.postId);
+    int tempScore = [self.score.text intValue];
+    tempScore++;
+    self.score.text = [NSString stringWithFormat:@"%d",tempScore];
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     [query getObjectInBackgroundWithId:self.postId block:^(PFObject *post, NSError *error) {
         if (!error) {
             // The find succeeded.
             [post incrementKey:@"score"];
             [post saveInBackground];
-            if(_delegate && [_delegate respondsToSelector:@selector(upvoteOrDownvoteTapped:)]) {
+            /*if(_delegate && [_delegate respondsToSelector:@selector(upvoteOrDownvoteTapped:)]) {
                 [_delegate upvoteOrDownvoteTapped:self];
-            }
+            }*/
         } else {
             // Log details of the failure
         }
     }];
 }
 - (IBAction)downvotePressed:(id)sender {
+    int tempScore = [self.score.text intValue];
+    tempScore--;
+    self.score.text = [NSString stringWithFormat:@"%d",tempScore];
     PFQuery *query = [PFQuery queryWithClassName:@"Post"];
     [query getObjectInBackgroundWithId:self.postId block:^(PFObject *post, NSError *error) {
         if (!error) {
             // #HACKYAF
             [post incrementKey:@"score" byAmount:@-1];
             [post saveInBackground];
-            if(_delegate && [_delegate respondsToSelector:@selector(upvoteOrDownvoteTapped:)]) {
+            /*if(_delegate && [_delegate respondsToSelector:@selector(upvoteOrDownvoteTapped:)]) {
                 [_delegate upvoteOrDownvoteTapped:self];
-            }
+            }*/
         } else {
             // Log details of the failure
         }
