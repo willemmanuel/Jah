@@ -31,6 +31,9 @@
             // The find succeeded.
             [post incrementKey:@"score"];
             [post saveInBackground];
+            if(_delegate && [_delegate respondsToSelector:@selector(upvoteOrDownvoteTapped:)]) {
+                [_delegate upvoteOrDownvoteTapped:self];
+            }
         } else {
             // Log details of the failure
         }
@@ -43,6 +46,9 @@
             // #HACKYAF
             [post incrementKey:@"score" byAmount:@-1];
             [post saveInBackground];
+            if(_delegate && [_delegate respondsToSelector:@selector(upvoteOrDownvoteTapped:)]) {
+                [_delegate upvoteOrDownvoteTapped:self];
+            }
         } else {
             // Log details of the failure
         }

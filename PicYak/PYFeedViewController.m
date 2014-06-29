@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Mignone. All rights reserved.
 //
 #import <Parse/Parse.h>
-#import "PostTableViewCell.h"
 #import "PYFeedViewController.h"
 #import "Post.h"
 
@@ -184,6 +183,7 @@
     cell.postId = currentPost.postId;
     cell.score.text = [NSString stringWithFormat:@"%d",currentPost.score];
     cell.caption.text = currentPost.postId;
+    cell.delegate = self;
     return cell;
 }
 
@@ -241,6 +241,12 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     currentLocation = [locations lastObject];
     [locationManager stopUpdatingLocation];
+}
+
+# pragma mark - Post table view cell delegate methods
+
+-(void)upvoteOrDownvoteTapped:(PostTableViewCell*)postTableViewCell {
+    [self.tableView reloadData];
 }
 
 /*

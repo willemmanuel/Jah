@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class PostTableViewCell;
+@protocol PostTableViewCellDelegate <NSObject>
+@optional
+-(void)upvoteOrDownvoteTapped:(PostTableViewCell*)postTableViewCell;
+@end
+
+
 @interface PostTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet NSString *postId;
 @property (weak, nonatomic) IBOutlet UIImageView *picture;
@@ -15,5 +22,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *downvoteButton;
 @property (weak, nonatomic) IBOutlet UILabel *score;
 @property (weak, nonatomic) IBOutlet UILabel *caption;
+@property (nonatomic, assign) id <PostTableViewCellDelegate> delegate;
 
 @end
