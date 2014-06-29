@@ -32,6 +32,8 @@
 		7233CCE7195FD12300B5289D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE6195FD12300B5289D /* SystemConfiguration.framework */; };
 		7233CCE9195FD12300B5289D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE8195FD12300B5289D /* Social.framework */; };
 		7233CCEB195FD12300B5289D /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCEA195FD12300B5289D /* Twitter.framework */; };
+		7233CCEF195FD12300B5289D /* PYFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCEE195FD12300B5289D /* PYFeedViewController.m */; };
+		7233CCF2195FD12300B5289D /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF1195FD12300B5289D /* PostTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +76,10 @@
 		7233CCE6195FD12300B5289D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7233CCE8195FD12300B5289D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		7233CCEA195FD12300B5289D /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		7233CCED195FD12300B5289D /* PYFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYFeedViewController.h; sourceTree = "<group>"; };
+		7233CCEE195FD12300B5289D /* PYFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYFeedViewController.m; sourceTree = "<group>"; };
+		7233CCF0195FD12300B5289D /* PostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostTableViewCell.h; path = ../PostTableViewCell.h; sourceTree = "<group>"; };
+		7233CCF1195FD12300B5289D /* PostTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostTableViewCell.m; path = ../PostTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +167,10 @@
 				7233CCAF195FD12300B5289D /* AppDelegate.m */,
 				7233CCB1195FD12300B5289D /* Main.storyboard */,
 				7233CCB7195FD12300B5289D /* Images.xcassets */,
+				7233CCED195FD12300B5289D /* PYFeedViewController.h */,
+				7233CCEE195FD12300B5289D /* PYFeedViewController.m */,
+				7233CCF0195FD12300B5289D /* PostTableViewCell.h */,
+				7233CCF1195FD12300B5289D /* PostTableViewCell.m */,
 				7233CCA6195FD12300B5289D /* Supporting Files */,
 			);
 			path = PicYak;
@@ -293,7 +303,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7233CCB0195FD12300B5289D /* AppDelegate.m in Sources */,
+				7233CCEF195FD12300B5289D /* PYFeedViewController.m in Sources */,
 				7233CCAC195FD12300B5289D /* main.m in Sources */,
+				7233CCF2195FD12300B5289D /* PostTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +518,7 @@
 				7233CCD0195FD12300B5289D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7233CCD1195FD12300B5289D /* Build configuration list for PBXNativeTarget "PicYakTests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +527,7 @@
 				7233CCD3195FD12300B5289D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
