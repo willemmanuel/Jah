@@ -9,6 +9,7 @@
 #import "FeedTableViewController.h"
 #import "Post.h"
 #import "CommentsTableViewController.h"
+#import "PostDetailsViewController.h"
 
 @interface FeedTableViewController (){
     NSMutableArray *posts;
@@ -59,18 +60,7 @@
 }
 
 - (IBAction)newPost:(id)sender{
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        picker.showsCameraControls = YES;
-        picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
-    } else {
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-
-    [self presentViewController:picker animated:YES completion:NULL];
+    [self performSegueWithIdentifier:@"pushDetails" sender:self];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -187,62 +177,13 @@
     Post *currentPost = [self.allPosts objectAtIndex:indexPath.row];
     cell.picture.image = currentPost.picture;
     cell.score.text = [NSString stringWithFormat:@"%d",currentPost.score];
-    cell.caption.text = currentPost.postId;
+    cell.caption.text = currentPost.caption;
     cell.delegate = self;
     cell.post = currentPost; 
     return cell;
 }
 
-# pragma mark - UIImagePickerControllerDelegate methods
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    [locationManager startUpdatingLocation];
-    UIImage *photo = info[UIImagePickerControllerEditedImage];
-    // Launch post view controller here
-    NSData *imageData = UIImageJPEGRepresentation(photo, .05f);
-    PFFile *imageFile = [PFFile fileWithName:@"PostPicture.jpg" data:imageData];
-    
-    //HUD creation here (see example for code)
-    
-    // Save PFFile
-    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            // Hide old HUD, show completed HUD (see example for code)
-            [locationManager startMonitoringSignificantLocationChanges];
-            currentLocation = locationManager.location;
-            [locationManager stopMonitoringSignificantLocationChanges];
-            CLLocationCoordinate2D coordinate = [currentLocation coordinate];
-            PFGeoPoint *geoPoint = [PFGeoPoint geoPointWithLatitude:coordinate.latitude
-                                                          longitude:coordinate.longitude];
-            // Create a PFObject around a PFFile and associate it with the current user
-            PFObject *newPost = [PFObject objectWithClassName:@"Post"];
-            [newPost setObject:imageFile forKey:@"picture"];
-            [newPost setObject:geoPoint forKey:@"location"];
-            [newPost saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (!error) {
-                    //code for successful save
-                    
-                }
-                else{
-                    // Log details of the failure
-                    NSLog(@"Error: %@ %@", error, [error userInfo]);
-                    
-                }
-            }];
-        }
-        else{
-            // Log details of the failure
-           
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-    } progressBlock:^(int percentDone) {
-        // Update your progress spinner here. percentDone will be between 0 and 100.
-    }];
-     [picker dismissViewControllerAnimated:YES completion:NULL];
-}
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [picker dismissViewControllerAnimated:YES completion:NULL];
-}
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     currentLocation = [locations lastObject];

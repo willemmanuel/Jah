@@ -11,6 +11,7 @@
 #import "Comment.h"
 #import "CommentTableViewCell.h"
 
+
 @interface CommentsTableViewController () {
     NSMutableArray *comments;
 }
@@ -88,6 +89,16 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)_tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Comment *c = [comments objectAtIndex:[indexPath row]] ;
+    NSString *text = c.comment;
+
+   // CGSize sizeThatShouldFitTheContent = [_textView sizeThatFits:_textView.frame.size];
+   // heightConstraint.constant = sizeThatShouldFitTheContent.height;
+
+    return 10;
+}
 - (void)refreshTable
 {
     [self loadComments];

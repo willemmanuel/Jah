@@ -35,6 +35,10 @@
 		7233CCEF195FD12300B5289D /* FeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCEE195FD12300B5289D /* FeedTableViewController.m */; };
 		7233CCF2195FD12300B5289D /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF1195FD12300B5289D /* PostTableViewCell.m */; };
 		7233CCF5195FD20800B5289D /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF4195FD20800B5289D /* Post.m */; };
+		7233CCF81960F9E000B5289D /* PostDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF71960F9E000B5289D /* PostDetailsViewController.m */; };
+		7233CCFA1961031E00B5289D /* Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 7233CCF91961031E00B5289D /* Camera.png */; };
+		7233CD03196114C700B5289D /* downvoteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7233CD01196114C700B5289D /* downvoteArrow.png */; };
+		7233CD04196114C700B5289D /* upvoteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7233CD02196114C700B5289D /* upvoteArrow.png */; };
 		BE504A2519605518004E92F9 /* CommentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A2419605518004E92F9 /* CommentsTableViewController.m */; };
 		BE504A281960553E004E92F9 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A271960553E004E92F9 /* CommentTableViewCell.m */; };
 		BE504A2B19605AF7004E92F9 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A2A19605AF7004E92F9 /* Comment.m */; };
@@ -86,6 +90,11 @@
 		7233CCF1195FD12300B5289D /* PostTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostTableViewCell.m; path = ../PostTableViewCell.m; sourceTree = "<group>"; };
 		7233CCF3195FD20800B5289D /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Post.h; path = ../Post.h; sourceTree = "<group>"; };
 		7233CCF4195FD20800B5289D /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Post.m; path = ../Post.m; sourceTree = "<group>"; };
+		7233CCF61960F9E000B5289D /* PostDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostDetailsViewController.h; sourceTree = "<group>"; };
+		7233CCF71960F9E000B5289D /* PostDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostDetailsViewController.m; sourceTree = "<group>"; };
+		7233CCF91961031E00B5289D /* Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Camera.png; sourceTree = "<group>"; };
+		7233CD01196114C700B5289D /* downvoteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downvoteArrow.png; sourceTree = "<group>"; };
+		7233CD02196114C700B5289D /* upvoteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upvoteArrow.png; sourceTree = "<group>"; };
 		BE504A2319605518004E92F9 /* CommentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsTableViewController.h; sourceTree = "<group>"; };
 		BE504A2419605518004E92F9 /* CommentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsTableViewController.m; sourceTree = "<group>"; };
 		BE504A261960553E004E92F9 /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTableViewCell.h; sourceTree = "<group>"; };
@@ -215,6 +224,16 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		7233CCFC1961033800B5289D /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				7233CD01196114C700B5289D /* downvoteArrow.png */,
+				7233CD02196114C700B5289D /* upvoteArrow.png */,
+				7233CCF91961031E00B5289D /* Camera.png */,
+			);
+			name = Icons;
+			sourceTree = "<group>";
+		};
 		BE504A2C19605BDC004E92F9 /* Comments */ = {
 			isa = PBXGroup;
 			children = (
@@ -233,10 +252,13 @@
 			children = (
 				7233CCED195FD12300B5289D /* FeedTableViewController.h */,
 				7233CCEE195FD12300B5289D /* FeedTableViewController.m */,
+				7233CCF61960F9E000B5289D /* PostDetailsViewController.h */,
+				7233CCF71960F9E000B5289D /* PostDetailsViewController.m */,
 				7233CCF0195FD12300B5289D /* PostTableViewCell.h */,
 				7233CCF1195FD12300B5289D /* PostTableViewCell.m */,
 				7233CCF3195FD20800B5289D /* Post.h */,
 				7233CCF4195FD20800B5289D /* Post.m */,
+				7233CCFC1961033800B5289D /* Icons */,
 			);
 			name = Posts;
 			sourceTree = "<group>";
@@ -318,7 +340,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7233CCB8195FD12300B5289D /* Images.xcassets in Resources */,
+				7233CD03196114C700B5289D /* downvoteArrow.png in Resources */,
 				7233CCAA195FD12300B5289D /* InfoPlist.strings in Resources */,
+				7233CCFA1961031E00B5289D /* Camera.png in Resources */,
+				7233CD04196114C700B5289D /* upvoteArrow.png in Resources */,
 				7233CCB3195FD12300B5289D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,6 +371,7 @@
 				BE504A281960553E004E92F9 /* CommentTableViewCell.m in Sources */,
 				7233CCF2195FD12300B5289D /* PostTableViewCell.m in Sources */,
 				BE504A2B19605AF7004E92F9 /* Comment.m in Sources */,
+				7233CCF81960F9E000B5289D /* PostDetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
