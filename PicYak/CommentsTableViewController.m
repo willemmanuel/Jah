@@ -92,12 +92,10 @@
 - (CGFloat)tableView:(UITableView *)_tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Comment *c = [comments objectAtIndex:[indexPath row]] ;
-    NSString *text = c.comment;
-
-   // CGSize sizeThatShouldFitTheContent = [_textView sizeThatFits:_textView.frame.size];
-   // heightConstraint.constant = sizeThatShouldFitTheContent.height;
-
-    return 10;
+    CGSize constraint = CGSizeMake(self.view.frame.size.width, MAXFLOAT);
+    CGSize size = [c.comment boundingRectWithSize:constraint options: NSStringDrawingUsesLineFragmentOrigin
+                                 attributes: @{ NSFontAttributeName: [UIFont systemFontOfSize:17] } context: nil].size;
+    return size.height + 60.0f;
 }
 - (void)refreshTable
 {
