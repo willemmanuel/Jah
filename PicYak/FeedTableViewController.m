@@ -186,10 +186,10 @@
     }
     Post *currentPost = [self.allPosts objectAtIndex:indexPath.row];
     cell.picture.image = currentPost.picture;
-    cell.postId = currentPost.postId;
     cell.score.text = [NSString stringWithFormat:@"%d",currentPost.score];
     cell.caption.text = currentPost.postId;
     cell.delegate = self;
+    cell.post = currentPost; 
     return cell;
 }
 

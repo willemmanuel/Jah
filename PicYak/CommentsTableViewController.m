@@ -44,12 +44,11 @@
     PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
     //query.cachePolicy = kPFCachePolicyCacheThenNetwork;
     [query orderByAscending:@"createdAt"];
-    [query whereKey:@"postId" equalTo:self.post.post];
+    [query whereKey:@"postId" equalTo:self.post.postPFObject];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (error) {
             NSLog(@"Something went wrong with the comments query. We should probably do something here");
         } else {
-    //NSArray *objects = [query findObjects];
             for (PFObject *object in objects) {
                 NSLog(@"%@", object[@"comment"]);
                 Comment *newComment = [[Comment alloc] initWithObject:object];
@@ -83,10 +82,9 @@
         cell = [[CommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
         Comment *currentComment = [comments objectAtIndex:indexPath.row];
-        [cell.comment setText: currentComment.comment];
-        cell.score.text = [NSString stringWithFormat:@"%d", currentComment.score];
-        cell.commentId = currentComment.commentId;
-   
+        [cell.commentLabel setText: currentComment.comment];
+        cell.scoreLabel.text = [NSString stringWithFormat:@"%d", currentComment.score];
+        cell.comment = currentComment;
     return cell;
 }
 
@@ -99,7 +97,7 @@
 - (IBAction)postCommentButtonPressed:(id)sender {
     PFObject *newComment = [PFObject objectWithClassName:@"Comment"];
     [newComment setObject:self.postComment.text forKey:@"comment"];
-    [newComment setObject:self.post.post forKey:@"postId"];
+    [newComment setObject:self.post.postPFObject forKey:@"postId"];
     [newComment saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             [self loadComments];

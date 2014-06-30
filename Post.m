@@ -16,7 +16,7 @@
     self.score = [[post objectForKey:@"score"] intValue];
     self.postId = post.objectId;
     self.createdAt = post.createdAt;
-    self.post = post;
+    self.postPFObject = post;
     
     PFGeoPoint *location = [post objectForKey:@"location"];
     self.location = [[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude];

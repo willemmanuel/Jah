@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Post.h"
 
 @class PostTableViewCell;
 @protocol PostTableViewCellDelegate <NSObject>
@@ -16,7 +17,7 @@
 
 
 @interface PostTableViewCell : UITableViewCell
-@property (strong, nonatomic) IBOutlet NSString *postId;
+@property (strong, nonatomic) Post *post;
 @property (weak, nonatomic) IBOutlet UIImageView *picture;
 @property (weak, nonatomic) IBOutlet UIButton *upvoteButton;
 @property (weak, nonatomic) IBOutlet UIButton *downvoteButton;

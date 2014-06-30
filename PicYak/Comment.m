@@ -15,6 +15,7 @@
     self.score = [[comment objectForKey:@"score"] intValue];
     self.comment = [comment objectForKey:@"comment"];
     self.commentId = comment.objectId;
+    self.commentPFObject = comment;
     return self;
 }
 

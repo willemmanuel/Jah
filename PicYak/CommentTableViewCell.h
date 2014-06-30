@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Comment.h"
 
 @interface CommentTableViewCell : UITableViewCell
-@property (nonatomic, strong) NSString *commentId;
-@property (weak, nonatomic) IBOutlet UILabel *comment;
-@property (weak, nonatomic) IBOutlet UILabel *score;
+@property (nonatomic, strong) Comment *comment;
+@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UIButton *upvoteButton;
 @property (weak, nonatomic) IBOutlet UIButton *downvoteButton;
 

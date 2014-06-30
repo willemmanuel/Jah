@@ -9,13 +9,15 @@
 #import "CommentTableViewCell.h"
 #import <Parse/Parse.h>
 
-@implementation CommentTableViewCell
+@implementation CommentTableViewCell {
+    BOOL fetching;
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
+        fetching = NO;
     }
     return self;
 }
@@ -28,79 +30,139 @@
 {
     // Initialization code
 }
+
 - (IBAction)upvotePressed:(id)sender {
+    if (fetching)
+        return;
+    fetching = YES;
     //Look for a voter object with the devices unique identifier for the post
-    PFQuery *voterQuery = [PFQuery queryWithClassName:@"Voter"];
-    [voterQuery whereKey:@"id" equalTo:self.commentId];
-    [voterQuery whereKey:@"voterUniqueId" equalTo:[UIDevice currentDevice].identifierForVendor.UUIDString];
-    [voterQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        //If there is no error that means we found a voter so we should do nothing
-        if (!error) {
-            NSLog(@"You already voted. Your opinion doesn't matter that much");
+    PFQuery *voteQuery = [PFQuery queryWithClassName:@"CommentVote"];
+    [voteQuery whereKey:@"comment" equalTo:self.comment.commentPFObject];
+    [voteQuery whereKey:@"userDeviceId" equalTo:[UIDevice currentDevice].identifierForVendor.UUIDString];
+    [voteQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (object) {
+            if ([object[@"upvote"] boolValue] == YES) {
+                [object delete];
+                int tempScore = [self.scoreLabel.text intValue];
+                tempScore-- ;
+                self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+                
+                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                [query getObjectInBackgroundWithId:self.comment.commentId block:^(PFObject *comment, NSError *error) {
+                    if (!error) {
+                        [comment incrementKey:@"score" byAmount:@-1];
+                        [comment save];
+                        fetching = NO;
+                    } else {
+                        fetching = NO;
+                    }
+                }];
+                
+            } else {
+                // changing from down to upvote
+                object[@"upvote"] = @YES;
+                [object save];
+                // Decrement score
+                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                [query getObjectInBackgroundWithId:self.comment.commentId block:^(PFObject *post, NSError *error) {
+                    if (!error) {
+                        [post incrementKey:@"score" byAmount:@2];
+                        [post save];
+                        fetching = NO;
+                    } else {
+                        fetching = NO;
+                    }
+                }];
+                // Increment label
+                int tempScore = [self.scoreLabel.text intValue];
+                tempScore += 2;
+                self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+            }
         }
         //Otherwise its their first time voting on this post so let them and save their vote
         else {
-            int tempScore = [self.score.text intValue];
+            int tempScore = [self.scoreLabel.text intValue];
             tempScore++;
-            self.score.text = [NSString stringWithFormat:@"%d",tempScore];
-            PFObject *newCommenter = [PFObject objectWithClassName:@"Voter"];
-            newCommenter[@"id"] = self.commentId;
-            newCommenter[@"voterUniqueId"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
-            [newCommenter saveInBackground];
-            
+            self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+            PFObject *newCommentVote = [PFObject objectWithClassName:@"CommentVote"];
+            newCommentVote[@"comment"] = self.comment.commentPFObject;
+            newCommentVote[@"userDeviceId"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
+            newCommentVote[@"upvote"] = @YES;
+            [newCommentVote save];
             PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-            [query getObjectInBackgroundWithId:self.commentId block:^(PFObject *comment, NSError *error) {
-                if (!error) {
-                    // The find succeeded.
-                    [comment incrementKey:@"score"];
-                    [comment saveInBackground];
-                    /*if(_delegate && [_delegate respondsToSelector:@selector(upvoteOrDownvoteTapped:)]) {
-                     [_delegate upvoteOrDownvoteTapped:self];
-                     }*/
-                } else {
-                    // Log details of the failure
-                }
-            }];
+            PFObject *post = [query getObjectWithId:self.comment.commentId];
+            [post incrementKey:@"score"];
+            [post save];
+            fetching = NO;
         }
     }];
-
 }
 
 - (IBAction)downvotePressed:(id)sender {
+    if (fetching)
+        return;
+    fetching = YES;
     //Look for a voter object with the devices unique identifier for the post
-    PFQuery *voterQuery = [PFQuery queryWithClassName:@"Voter"];
-    [voterQuery whereKey:@"id" equalTo:self.commentId];
-    [voterQuery whereKey:@"voterUniqueId" equalTo:[UIDevice currentDevice].identifierForVendor.UUIDString];
-    [voterQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        //If there is no error that means we found a voter so we should do nothing
-        if (!error) {
-            NSLog(@"You already voted. Your opinion doesn't matter that much");
+    PFQuery *voteQuery = [PFQuery queryWithClassName:@"CommentVote"];
+    [voteQuery whereKey:@"comment" equalTo:self.comment.commentPFObject];
+    [voteQuery whereKey:@"userDeviceId" equalTo:[UIDevice currentDevice].identifierForVendor.UUIDString];
+    [voteQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (object) {
+            if ([object[@"upvote"] boolValue] == NO) {
+                [object delete];
+                int tempScore = [self.scoreLabel.text intValue];
+                tempScore++ ;
+                self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+                
+                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                [query getObjectInBackgroundWithId:self.comment.commentId block:^(PFObject *comment, NSError *error) {
+                    if (!error) {
+                        [comment incrementKey:@"score"];
+                        [comment save];
+                        fetching = NO;
+                    } else {
+                        fetching = NO;
+                    }
+                }];
+                
+            } else {
+                object[@"upvote"] = @NO;
+                [object save];
+                // Decrement score
+                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                [query getObjectInBackgroundWithId:self.comment.commentId block:^(PFObject *post, NSError *error) {
+                    if (!error) {
+                        [post incrementKey:@"score" byAmount:@-2];
+                        [post save];
+                        fetching = NO;
+                    } else {
+                        fetching = NO;
+                    }
+                }];
+                // Increment label
+                int tempScore = [self.scoreLabel.text intValue];
+                tempScore -= 2;
+                self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+            }
         }
         //Otherwise its their first time voting on this post so let them and save their vote
         else {
-            int tempScore = [self.score.text intValue];
-            tempScore++;
-            self.score.text = [NSString stringWithFormat:@"%d",tempScore];
-            PFObject *newCommenter = [PFObject objectWithClassName:@"Voter"];
-            newCommenter[@"id"] = self.commentId;
-            newCommenter[@"voterUniqueId"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
-            [newCommenter saveInBackground];
-            
+            int tempScore = [self.scoreLabel.text intValue];
+            tempScore--;
+            self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+            PFObject *newCommentVote = [PFObject objectWithClassName:@"CommentVote"];
+            newCommentVote[@"comment"] = self.comment.commentPFObject;
+            newCommentVote[@"userDeviceId"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
+            newCommentVote[@"upvote"] = @NO;
+            [newCommentVote save];
             PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-            [query getObjectInBackgroundWithId:self.commentId block:^(PFObject *comment, NSError *error) {
-                if (!error) {
-                    // The find succeeded.
-                    [comment incrementKey:@"score" byAmount:@-1];
-                    [comment saveInBackground];
-                    /*if(_delegate && [_delegate respondsToSelector:@selector(upvoteOrDownvoteTapped:)]) {
-                     [_delegate upvoteOrDownvoteTapped:self];
-                     }*/
-                } else {
-                    // Log details of the failure
-                }
-            }];
+            PFObject *post = [query getObjectWithId:self.comment.commentId];
+            [post incrementKey:@"score" byAmount:@-1];
+            [post save];
+            fetching = NO;
         }
     }];
 }
+
 
 @end

@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSString *commentId;
 @property (nonatomic, strong) NSString *comment;
 @property (nonatomic) int score;
+@property (nonatomic, strong) PFObject *commentPFObject;
 
 - (id) initWithObject: (PFObject *) comment;
 
