@@ -121,6 +121,16 @@
     
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:self.post.picture];
+    imageView.frame = CGRectMake(10,10,320,250);
+    
+    return imageView;
+    
+}
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 250;
+}
 
 @end
