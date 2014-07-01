@@ -23,7 +23,8 @@
 
 - (void)awakeFromNib
 {
-    // Initialization code
+    _picture.layer.borderColor = [UIColor colorWithRed:.529 green:.737 blue:.855 alpha:1.0].CGColor;
+    _picture.layer.borderWidth = 6;
 }
 - (IBAction)upvotePressed:(id)sender {
     if (fetching)

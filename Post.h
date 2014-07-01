@@ -12,11 +12,13 @@
 
 @property (nonatomic, strong) PFObject *postPFObject;
 @property (nonatomic,strong) NSDate *createdAt;
+@property (nonatomic,strong) NSString *createdAtString;
 @property (nonatomic,strong) UIImage *picture;
 @property (nonatomic,strong) NSString *caption;
 @property (nonatomic,strong) NSString *postId;
 @property (nonatomic,strong) CLLocation *location;
 @property (nonatomic) int score;
+
 
 
 - (id) initWithObject: (PFObject *) post;

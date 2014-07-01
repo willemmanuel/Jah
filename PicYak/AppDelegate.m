@@ -16,6 +16,7 @@
     [Parse setApplicationId:@"pGr2XyaZME9w8C6hhesArEwDYSpObQ7zcteKAAQp"
                   clientKey:@"olINIcgamr5hMJiwYp5yMgRhZEbuUlzhVOwaJ3Li"];
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     return YES;
 }
 							

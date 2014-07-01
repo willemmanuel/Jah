@@ -22,12 +22,15 @@
 
 @implementation FeedTableViewController
 
-
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
+        
         // Custom initialization
     }
     return self;
@@ -36,6 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setNeedsStatusBarAppearanceUpdate];
     uniqueDeviceIdentifier = [UIDevice currentDevice].identifierForVendor.UUIDString;
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc]init];
     [refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
@@ -177,7 +181,11 @@
     Post *currentPost = [self.allPosts objectAtIndex:indexPath.row];
     cell.picture.image = currentPost.picture;
     cell.score.text = [NSString stringWithFormat:@"%d",currentPost.score];
-    cell.caption.text = currentPost.caption;
+    cell.dateLabel.text = currentPost.createdAtString;
+    if (currentPost.caption && [currentPost.caption length] > 0)
+        cell.caption.text = currentPost.caption;
+    else
+        cell.caption.text = @"(No caption)";
     cell.delegate = self;
     cell.post = currentPost; 
     return cell;

@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *downvoteButton;
 @property (weak, nonatomic) IBOutlet UILabel *score;
 @property (weak, nonatomic) IBOutlet UILabel *caption;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (nonatomic, assign) id <PostTableViewCellDelegate> delegate;
 
 @end
