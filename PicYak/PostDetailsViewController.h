@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface PostDetailsViewController : UIViewController <UITextViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate>
+@interface PostDetailsViewController : UIViewController <UIAlertViewDelegate, UITextViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *addImageButton;
-@property (weak, nonatomic) IBOutlet UITextView *captionTextView;
+@property (weak, nonatomic) IBOutlet UITextField *captionTextField;
+@property (weak, nonatomic) IBOutlet UITextField *expiresField;
+
 
 @end

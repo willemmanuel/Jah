@@ -17,13 +17,14 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         fetching = NO;
+        
     }
     return self;
 }
 
 - (void)awakeFromNib
 {
-    _picture.layer.borderColor = [UIColor colorWithRed:.529 green:.737 blue:.855 alpha:1.0].CGColor;
+    _picture.layer.borderColor = [UIColor colorWithRed:.616 green:.792 blue:.875 alpha:1.0].CGColor;
     _picture.layer.borderWidth = 6;
 }
 - (IBAction)upvotePressed:(id)sender {

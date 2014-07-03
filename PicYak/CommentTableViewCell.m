@@ -28,7 +28,7 @@
 }
 - (void)awakeFromNib
 {
-    // Initialization code
+
 }
 
 - (IBAction)upvotePressed:(id)sender {

@@ -16,6 +16,7 @@
     CLLocationManager *locationManager;
     CLLocation *currentLocation;
     NSString *uniqueDeviceIdentifier;
+    BOOL isLoading;
 }
 
 @end
@@ -40,10 +41,13 @@
 {
     [super viewDidLoad];
     [self setNeedsStatusBarAppearanceUpdate];
+    isLoading = NO;
     uniqueDeviceIdentifier = [UIDevice currentDevice].identifierForVendor.UUIDString;
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc]init];
+    [refreshControl setTintColor:[UIColor whiteColor]];
     [refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
+    self.tableView.delegate = self;
     
     self.allPosts =[[NSMutableArray alloc] init];
     locationManager = [[CLLocationManager alloc] init];
@@ -87,7 +91,8 @@
 }
 
 - (void)queryForAllPostsNearLocation{
-	PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+    isLoading = YES;
+	PFQuery *mainQuery = [PFQuery queryWithClassName:@"Post"];
     NSLog(@"%f, %f",currentLocation.coordinate.latitude, currentLocation.coordinate.longitude);
 	if (currentLocation == nil) {
 		NSLog(@"%s got a nil location!", __PRETTY_FUNCTION__);
@@ -95,17 +100,21 @@
     
 	// If no objects are loaded in memory, we look to the cache first to fill the table
 	// and then subsequently do a query against the network.
-	if ([self.allPosts count] == 0) {
-		query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-	}
+    PFQuery *notExpiredQuery = [PFQuery queryWithClassName:@"Post"];
+    [notExpiredQuery whereKey:@"expiration" greaterThanOrEqualTo:[NSDate date]];
+    
+    PFQuery *neverExpireQuery = [PFQuery queryWithClassName:@"Post"];
+    [neverExpireQuery whereKeyDoesNotExist:@"expiration"];
+    
+    mainQuery = [PFQuery orQueryWithSubqueries:@[notExpiredQuery, neverExpireQuery]];
     
 	// Query for posts sort of kind of near our current location.
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
-    [query orderByDescending:@"createdAt"];
-	[query whereKey:@"location" nearGeoPoint:point withinKilometers:5.28];
-	//query.limit = 10;
+    [mainQuery orderByDescending:@"createdAt"];
+	[mainQuery whereKey:@"location" nearGeoPoint:point withinKilometers:5.28];
+    mainQuery.limit = 15;
     
-	[query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+	[mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
 		if (error) {
 			NSLog(@"error in geo query!"); // todo why is this ever happening?
 		} else {
@@ -157,7 +166,7 @@
             NSArray *descriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
             NSArray *sortedArray = [self.allPosts sortedArrayUsingDescriptors:descriptors];
             self.allPosts = [sortedArray mutableCopy];
-
+            isLoading = NO;
             [self.tableView reloadData];
 		}
 	}];
@@ -187,7 +196,12 @@
     else
         cell.caption.text = @"(No caption)";
     cell.delegate = self;
-    cell.post = currentPost; 
+    cell.post = currentPost;
+    if(currentPost.comments == 1) {
+        cell.commentsLabel.text = @"1 reply"; 
+    } else {
+        cell.commentsLabel.text = [NSString stringWithFormat:@"%d replies", currentPost.comments];
+    }
     return cell;
 }
 
@@ -195,7 +209,14 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     currentLocation = [locations lastObject];
-    [locationManager stopUpdatingLocation];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView.contentSize.height - scrollView.contentOffset.y < (self.view.bounds.size.height)) {
+        if (!isLoading) {
+            //[self loadNextPage];
+        }
+    }
 }
 
 # pragma mark - Post table view cell delegate methods
@@ -210,6 +231,13 @@
         CommentsTableViewController *destViewController = segue.destinationViewController;
         destViewController.post = [self.allPosts objectAtIndex:indexPath.row];
     }
+}
+
+-(float) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    Post *currentPost = [self.allPosts objectAtIndex:indexPath.row];
+    CGSize constraint = CGSizeMake(280.0f, 20000.0f);
+    CGSize size = [currentPost.caption sizeWithFont:[UIFont boldSystemFontOfSize:17.0] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    return 281+30+3+25+3+3+size.height;
 }
 
 @end

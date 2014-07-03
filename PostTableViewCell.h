@@ -16,7 +16,7 @@
 @end
 
 
-@interface PostTableViewCell : UITableViewCell
+@interface PostTableViewCell : PFTableViewCell
 @property (strong, nonatomic) Post *post;
 @property (weak, nonatomic) IBOutlet UIImageView *picture;
 @property (weak, nonatomic) IBOutlet UIButton *upvoteButton;
@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *score;
 @property (weak, nonatomic) IBOutlet UILabel *caption;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *commentsLabel;
 @property (nonatomic, assign) id <PostTableViewCellDelegate> delegate;
 
 @end

@@ -17,6 +17,7 @@
     self.postId = post.objectId;
     self.createdAt = post.createdAt;
     self.createdAtString = [self dateDiff:post.createdAt];
+    self.comments = [[post objectForKey:@"comments"] intValue];
     self.postPFObject = post;
     
     PFGeoPoint *location = [post objectForKey:@"location"];
@@ -28,6 +29,7 @@
             self.picture = [UIImage imageWithData:data];
       //  }
     //}];
+    
     return self;
 }
 
@@ -56,7 +58,7 @@
     if(ti < 1) {
     	return @"never";
     } else 	if (ti < 60) {
-    	return @"<1m";
+    	return @"1m";
     } else if (ti < 3600) {
     	int diff = round(ti / 60);
     	return [NSString stringWithFormat:@"%dm", diff];

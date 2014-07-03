@@ -32,13 +32,13 @@
 		7233CCE7195FD12300B5289D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE6195FD12300B5289D /* SystemConfiguration.framework */; };
 		7233CCE9195FD12300B5289D /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCE8195FD12300B5289D /* Social.framework */; };
 		7233CCEB195FD12300B5289D /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCEA195FD12300B5289D /* Twitter.framework */; };
-		7233CCEF195FD12300B5289D /* FeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCEE195FD12300B5289D /* FeedTableViewController.m */; };
 		7233CCF2195FD12300B5289D /* PostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF1195FD12300B5289D /* PostTableViewCell.m */; };
 		7233CCF5195FD20800B5289D /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF4195FD20800B5289D /* Post.m */; };
 		7233CCF81960F9E000B5289D /* PostDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF71960F9E000B5289D /* PostDetailsViewController.m */; };
-		7233CCFA1961031E00B5289D /* Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 7233CCF91961031E00B5289D /* Camera.png */; };
 		7233CD03196114C700B5289D /* downvoteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7233CD01196114C700B5289D /* downvoteArrow.png */; };
 		7233CD04196114C700B5289D /* upvoteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7233CD02196114C700B5289D /* upvoteArrow.png */; };
+		BE3D4A361963B1FA002F01D2 /* Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3D4A351963B1FA002F01D2 /* Camera.png */; };
+		BE3D4A391964AA32002F01D2 /* PFFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3D4A381964AA32002F01D2 /* PFFeedTableViewController.m */; };
 		BE504A2519605518004E92F9 /* CommentsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A2419605518004E92F9 /* CommentsTableViewController.m */; };
 		BE504A281960553E004E92F9 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A271960553E004E92F9 /* CommentTableViewCell.m */; };
 		BE504A2B19605AF7004E92F9 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A2A19605AF7004E92F9 /* Comment.m */; };
@@ -51,6 +51,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 7233CC9B195FD12300B5289D;
 			remoteInfo = PicYak;
+		};
+		BE3D4A3F19661F47002F01D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6A5D9A1015E0152D001FAD14;
+			remoteInfo = DLCImagePickerController;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -84,17 +91,18 @@
 		7233CCE6195FD12300B5289D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7233CCE8195FD12300B5289D /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		7233CCEA195FD12300B5289D /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
-		7233CCED195FD12300B5289D /* FeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedTableViewController.h; sourceTree = "<group>"; };
-		7233CCEE195FD12300B5289D /* FeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedTableViewController.m; sourceTree = "<group>"; };
 		7233CCF0195FD12300B5289D /* PostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PostTableViewCell.h; path = ../PostTableViewCell.h; sourceTree = "<group>"; };
 		7233CCF1195FD12300B5289D /* PostTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PostTableViewCell.m; path = ../PostTableViewCell.m; sourceTree = "<group>"; };
 		7233CCF3195FD20800B5289D /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Post.h; path = ../Post.h; sourceTree = "<group>"; };
 		7233CCF4195FD20800B5289D /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Post.m; path = ../Post.m; sourceTree = "<group>"; };
 		7233CCF61960F9E000B5289D /* PostDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostDetailsViewController.h; sourceTree = "<group>"; };
 		7233CCF71960F9E000B5289D /* PostDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostDetailsViewController.m; sourceTree = "<group>"; };
-		7233CCF91961031E00B5289D /* Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Camera.png; sourceTree = "<group>"; };
 		7233CD01196114C700B5289D /* downvoteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downvoteArrow.png; sourceTree = "<group>"; };
 		7233CD02196114C700B5289D /* upvoteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upvoteArrow.png; sourceTree = "<group>"; };
+		BE3D4A351963B1FA002F01D2 /* Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Camera.png; sourceTree = "<group>"; };
+		BE3D4A371964AA32002F01D2 /* PFFeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFFeedTableViewController.h; sourceTree = "<group>"; };
+		BE3D4A381964AA32002F01D2 /* PFFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFFeedTableViewController.m; sourceTree = "<group>"; };
+		BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DLCImagePickerController.xcodeproj; path = "PicYak/DLCImagePickerController-master/DLCImagePickerController.xcodeproj"; sourceTree = "<group>"; };
 		BE504A2319605518004E92F9 /* CommentsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsTableViewController.h; sourceTree = "<group>"; };
 		BE504A2419605518004E92F9 /* CommentsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsTableViewController.m; sourceTree = "<group>"; };
 		BE504A261960553E004E92F9 /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTableViewCell.h; sourceTree = "<group>"; };
@@ -161,6 +169,7 @@
 		7233CC9E195FD12300B5289D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */,
 				7233CCEA195FD12300B5289D /* Twitter.framework */,
 				7233CCE8195FD12300B5289D /* Social.framework */,
 				7233CCE6195FD12300B5289D /* SystemConfiguration.framework */,
@@ -227,11 +236,19 @@
 		7233CCFC1961033800B5289D /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				BE3D4A351963B1FA002F01D2 /* Camera.png */,
 				7233CD01196114C700B5289D /* downvoteArrow.png */,
 				7233CD02196114C700B5289D /* upvoteArrow.png */,
-				7233CCF91961031E00B5289D /* Camera.png */,
 			);
 			name = Icons;
+			sourceTree = "<group>";
+		};
+		BE3D4A3B19661F47002F01D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BE3D4A4019661F47002F01D2 /* DLCImagePickerController.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		BE504A2C19605BDC004E92F9 /* Comments */ = {
@@ -250,8 +267,8 @@
 		BE504A2D19605BE4004E92F9 /* Posts */ = {
 			isa = PBXGroup;
 			children = (
-				7233CCED195FD12300B5289D /* FeedTableViewController.h */,
-				7233CCEE195FD12300B5289D /* FeedTableViewController.m */,
+				BE3D4A371964AA32002F01D2 /* PFFeedTableViewController.h */,
+				BE3D4A381964AA32002F01D2 /* PFFeedTableViewController.m */,
 				7233CCF61960F9E000B5289D /* PostDetailsViewController.h */,
 				7233CCF71960F9E000B5289D /* PostDetailsViewController.m */,
 				7233CCF0195FD12300B5289D /* PostTableViewCell.h */,
@@ -326,6 +343,12 @@
 			mainGroup = 7233CC93195FD12300B5289D;
 			productRefGroup = 7233CC9D195FD12300B5289D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BE3D4A3B19661F47002F01D2 /* Products */;
+					ProjectRef = BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				7233CC9B195FD12300B5289D /* PicYak */,
@@ -333,6 +356,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		BE3D4A4019661F47002F01D2 /* DLCImagePickerController.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = DLCImagePickerController.app;
+			remoteRef = BE3D4A3F19661F47002F01D2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7233CC9A195FD12300B5289D /* Resources */ = {
@@ -342,8 +375,8 @@
 				7233CCB8195FD12300B5289D /* Images.xcassets in Resources */,
 				7233CD03196114C700B5289D /* downvoteArrow.png in Resources */,
 				7233CCAA195FD12300B5289D /* InfoPlist.strings in Resources */,
-				7233CCFA1961031E00B5289D /* Camera.png in Resources */,
 				7233CD04196114C700B5289D /* upvoteArrow.png in Resources */,
+				BE3D4A361963B1FA002F01D2 /* Camera.png in Resources */,
 				7233CCB3195FD12300B5289D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,11 +398,11 @@
 			files = (
 				7233CCF5195FD20800B5289D /* Post.m in Sources */,
 				7233CCB0195FD12300B5289D /* AppDelegate.m in Sources */,
-				7233CCEF195FD12300B5289D /* FeedTableViewController.m in Sources */,
 				BE504A2519605518004E92F9 /* CommentsTableViewController.m in Sources */,
 				7233CCAC195FD12300B5289D /* main.m in Sources */,
 				BE504A281960553E004E92F9 /* CommentTableViewCell.m in Sources */,
 				7233CCF2195FD12300B5289D /* PostTableViewCell.m in Sources */,
+				BE3D4A391964AA32002F01D2 /* PFFeedTableViewController.m in Sources */,
 				BE504A2B19605AF7004E92F9 /* Comment.m in Sources */,
 				7233CCF81960F9E000B5289D /* PostDetailsViewController.m in Sources */,
 			);

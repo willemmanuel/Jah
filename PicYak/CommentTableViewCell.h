@@ -15,5 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UIButton *upvoteButton;
 @property (weak, nonatomic) IBOutlet UIButton *downvoteButton;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
 @end

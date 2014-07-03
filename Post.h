@@ -17,6 +17,7 @@
 @property (nonatomic,strong) NSString *caption;
 @property (nonatomic,strong) NSString *postId;
 @property (nonatomic,strong) CLLocation *location;
+@property (nonatomic) int comments;
 @property (nonatomic) int score;
 
 

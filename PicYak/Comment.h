@@ -15,7 +15,10 @@
 @property (nonatomic, strong) NSString *comment;
 @property (nonatomic) int score;
 @property (nonatomic, strong) PFObject *commentPFObject;
+@property (nonatomic, strong) NSString *dateString;
+@property (nonatomic, strong) NSDate *createdAt; 
 
 - (id) initWithObject: (PFObject *) comment;
 
 @end
+
