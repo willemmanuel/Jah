@@ -10,6 +10,6 @@
 #import <Parse/Parse.h>
 #import "PostTableViewCell.h"
 
-@interface PFFeedTableViewController : PFQueryTableViewController <PostTableViewCellDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate>
+@interface PFFeedTableViewController : UITableViewController <PostTableViewCellDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate>
 
 @end

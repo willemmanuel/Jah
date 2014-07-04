@@ -12,11 +12,11 @@
 @class PostTableViewCell;
 @protocol PostTableViewCellDelegate <NSObject>
 @optional
--(void)upvoteOrDownvoteTapped:(PostTableViewCell*)postTableViewCell;
+-(void)upvoteOrDownvoteTapped:(UITableViewCell*)postTableViewCell;
 @end
 
 
-@interface PostTableViewCell : PFTableViewCell
+@interface PostTableViewCell : UITableViewCell
 @property (strong, nonatomic) Post *post;
 @property (weak, nonatomic) IBOutlet UIImageView *picture;
 @property (weak, nonatomic) IBOutlet UIButton *upvoteButton;
