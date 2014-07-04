@@ -19,25 +19,17 @@
 
 @implementation PFFeedTableViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.parseClassName = @"Post";
-        self.pullToRefreshEnabled = YES;
-        self.paginationEnabled = YES;
-        self.objectsPerPage = 6;
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setNeedsStatusBarAppearanceUpdate];
     [self.refreshControl setTintColor:[UIColor whiteColor]];
+    self.parseClassName = @"Post";
+    self.pullToRefreshEnabled = YES;
+    self.paginationEnabled = YES;
+    self.objectsPerPage = 6;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     uniqueDeviceIdentifier = [UIDevice currentDevice].identifierForVendor.UUIDString;
     locationManager = [CLLocationManager new];
     locationManager.delegate = self;
@@ -93,15 +85,28 @@
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
     [mainQuery orderByDescending:@"createdAt"];
 	[mainQuery whereKey:@"location" nearGeoPoint:point withinKilometers:5.28];
+    [mainQuery setLimit:6];
     return mainQuery;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row >= [self.objects count]) {
+        return 40; 
+    }
     Post *currentPost = [[Post alloc] initWithObject:[self.objects objectAtIndex:indexPath.row]];
     CGSize constraint = CGSizeMake(280.0f, 20000.0f);
     CGSize size = [currentPost.caption sizeWithFont:[UIFont boldSystemFontOfSize:17.0] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
     return 280+30+3+25+size.height;
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView.contentSize.height - scrollView.contentOffset.y < (self.view.bounds.size.height)) {
+        if (![self isLoading]) {
+            [self loadNextPage];
+        }
+    }
+}
+
 
 # pragma mark - targets
 
