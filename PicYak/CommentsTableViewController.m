@@ -135,7 +135,7 @@
 -(float) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     Comment *currentComment = [comments objectAtIndex:indexPath.row];
     CGSize constraint = CGSizeMake(280.0f, 20000.0f);
-    CGSize size = [currentComment.comment sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [currentComment.comment sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
     return 28+size.height;
 }
 
