@@ -5,16 +5,15 @@
 //  Created by Rebecca Mignone on 6/28/14.
 //  Copyright (c) 2014 Mignone. All rights reserved.
 //
-
 #import <UIKit/UIKit.h>
 #import "Post.h"
 
 @class PostTableViewCell;
 @protocol PostTableViewCellDelegate <NSObject>
 @optional
--(void)upvoteOrDownvoteTapped:(UITableViewCell*)postTableViewCell;
+-(void)upvoteTapped:(PostTableViewCell*)cell;
+-(void)downvoteTapped:(PostTableViewCell*)cell;
 @end
-
 
 @interface PostTableViewCell : UITableViewCell
 @property (strong, nonatomic) Post *post;
@@ -25,6 +24,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *caption;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *commentsLabel;
-@property (nonatomic, assign) id <PostTableViewCellDelegate> delegate;
+@property (nonatomic, assign) id delegate;
 
 @end

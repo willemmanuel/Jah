@@ -43,6 +43,8 @@
 		BE3D4A391964AA32002F01D2 /* PFFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3D4A381964AA32002F01D2 /* PFFeedTableViewController.m */; };
 		BE504A281960553E004E92F9 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A271960553E004E92F9 /* CommentTableViewCell.m */; };
 		BE504A2B19605AF7004E92F9 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A2A19605AF7004E92F9 /* Comment.m */; };
+		BE526DD7196A4FE900B802B6 /* VoteData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BE526DD5196A4FE900B802B6 /* VoteData.xcdatamodeld */; };
+		BEC6F63E196A577A004D9E40 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEC6F63D196A577A004D9E40 /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,8 @@
 		BE504A271960553E004E92F9 /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTableViewCell.m; sourceTree = "<group>"; };
 		BE504A2919605AF7004E92F9 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		BE504A2A19605AF7004E92F9 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
+		BE526DD6196A4FE900B802B6 /* VoteData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VoteData.xcdatamodel; sourceTree = "<group>"; };
+		BEC6F63D196A577A004D9E40 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEC6F63E196A577A004D9E40 /* CoreData.framework in Frameworks */,
 				7233CCEB195FD12300B5289D /* Twitter.framework in Frameworks */,
 				7233CCE9195FD12300B5289D /* Social.framework in Frameworks */,
 				7233CCE7195FD12300B5289D /* SystemConfiguration.framework in Frameworks */,
@@ -153,6 +158,7 @@
 		7233CC93195FD12300B5289D = {
 			isa = PBXGroup;
 			children = (
+				BE526DD5196A4FE900B802B6 /* VoteData.xcdatamodeld */,
 				7233CCA5195FD12300B5289D /* PicYak */,
 				7233CCC4195FD12300B5289D /* PicYakTests */,
 				7233CC9E195FD12300B5289D /* Frameworks */,
@@ -172,6 +178,7 @@
 		7233CC9E195FD12300B5289D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BEC6F63D196A577A004D9E40 /* CoreData.framework */,
 				BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */,
 				7233CCEA195FD12300B5289D /* Twitter.framework */,
 				7233CCE8195FD12300B5289D /* Social.framework */,
@@ -409,6 +416,7 @@
 				72135C331969C8950057E95E /* CommentsViewController.m in Sources */,
 				7233CCAC195FD12300B5289D /* main.m in Sources */,
 				BE504A281960553E004E92F9 /* CommentTableViewCell.m in Sources */,
+				BE526DD7196A4FE900B802B6 /* VoteData.xcdatamodeld in Sources */,
 				7233CCF2195FD12300B5289D /* PostTableViewCell.m in Sources */,
 				72135C301968ED840057E95E /* CommentPictureTableViewCell.m in Sources */,
 				BE3D4A391964AA32002F01D2 /* PFFeedTableViewController.m in Sources */,
@@ -646,6 +654,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		BE526DD5196A4FE900B802B6 /* VoteData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BE526DD6196A4FE900B802B6 /* VoteData.xcdatamodel */,
+			);
+			currentVersion = BE526DD6196A4FE900B802B6 /* VoteData.xcdatamodel */;
+			path = VoteData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7233CC94195FD12300B5289D /* Project object */;
 }

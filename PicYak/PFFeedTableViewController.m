@@ -22,8 +22,6 @@
     NSMutableArray *_objects;
     NSMutableArray *_objectIDs;
     NSDate *_oldestPost;
-    BOOL _isLoading;
-    BOOL _isRefreshing;
 }
 
 - (void)viewDidLoad
@@ -204,10 +202,29 @@
         destViewController.post = currentPost;
     }
 }
--(void)didReceiveMemoryWarning {
-    UIAlertView *memoryAlert = [[UIAlertView alloc] initWithTitle:nil message:@"Memory warning received" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [memoryAlert show];
+
+# pragma mark - upvote/downvote delegate methods
+
+- (NSManagedObjectContext *)managedObjectContext {
+    NSManagedObjectContext *context = nil;
+    id delegate = [[UIApplication sharedApplication] delegate];
+    if ([delegate performSelector:@selector(managedObjectContext)]) {
+        context = [delegate managedObjectContext];
+    }
+    return context;
 }
+
+-(void)upvoteTapped:(PostTableViewCell*)cell {
+    NSManagedObjectContext *context = [self managedObjectContext];
+    NSManagedObject *newVote = [NSEntityDescription insertNewObjectForEntityForName:@"PostVote" inManagedObjectContext:context];
+    [newVote setValue:cell.post.postId forKey:@"post"];
+    [newVote setValue:@YES forKey:@"upvote"];
+}
+
+-(void)downvoteTapped:(PostTableViewCell*)cell {
+    
+}
+
 
 @end
 
