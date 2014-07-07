@@ -204,5 +204,10 @@
         destViewController.post = currentPost;
     }
 }
+-(void)didReceiveMemoryWarning {
+    UIAlertView *memoryAlert = [[UIAlertView alloc] initWithTitle:nil message:@"Memory warning received" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [memoryAlert show];
+}
+
 @end
 
