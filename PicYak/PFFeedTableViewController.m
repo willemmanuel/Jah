@@ -7,8 +7,8 @@
 //
 
 #import "PFFeedTableViewController.h"
-#import "CommentsTableViewController.h"
 #import <math.h>
+#import "CommentsViewController.h"
 
 @interface PFFeedTableViewController () {
     CLLocationManager *locationManager;
@@ -58,6 +58,7 @@
 -(void)refreshPulled {
     if (_isLoading)
         return;
+    
     [locationManager startUpdatingLocation];
     _isRefreshing = YES;
 }
@@ -101,38 +102,26 @@
 {
     if (_isLoading)
         return;
+    
     PFGeoPoint *southWest = [self findPointWithDistance:5000.0 andBearing:225.0];
     PFGeoPoint *northEast = [self findPointWithDistance:5000.0 andBearing:45.0];
     
     PFQuery *mainQuery = [PFQuery queryWithClassName:@"Post"];
     [mainQuery whereKey:@"location" withinGeoBoxFromSouthwest:southWest toNortheast:northEast];
     [mainQuery orderByDescending:@"createdAt"];
-    //if ([_objectIDs count] > 0 && !_isRefreshing) {
-    //  [mainQuery whereKey:@"objectId" notContainedIn:_objectIDs];
-    //}
-    //if (_oldestPost && !_isRefreshing) {
-    //  [mainQuery whereKey:@"createdAt" lessThan:_oldestPost];
-    //}
     [mainQuery setLimit:6];
     [mainQuery setSkip:_objects.count];
     _isLoading = YES;
     [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         _isLoading = NO;
         if (_isRefreshing) {
-            // [_objectIDs removeAllObjects];
             [_objects removeAllObjects];
             _isRefreshing = NO;
             [self.tableView reloadData];
-            // _oldestPost = nil;
-            // [self.tableView reloadData];
         }
         if (!error) {
             for (PFObject *object in objects) {
                 [_objects addObject:object];
-                //    [_objectIDs addObject:object.objectId];
-                //   if ([object.createdAt timeIntervalSinceDate:_oldestPost] > 0) {
-                //       _oldestPost = [[NSDate alloc] initWithTimeInterval:0 sinceDate:object.createdAt];
-                //   }
             }
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
@@ -205,7 +194,9 @@
     if ([segue.identifier isEqualToString:@"showComments"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Post *currentPost = [[Post alloc] initWithObject:(PFObject *)[_objects objectAtIndex:indexPath.row]];
-        CommentsTableViewController *destViewController = segue.destinationViewController;
+        //CommentsTableViewController *destViewController = segue.destinationViewController;
+        //destViewController.post = currentPost;
+        CommentsViewController *destViewController = segue.destinationViewController;
         destViewController.post = currentPost;
     }
 }

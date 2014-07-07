@@ -10,10 +10,13 @@
 #import <Parse/Parse.h>
 
 @interface PostDetailsViewController (){
+    
     CLLocationManager *locationManager;
     CLLocation *currentLocation;
     PFFile *imageToSave;
     NSArray *expirationChoices;
+    double kOFFSET_FOR_KEYBOARD;
+    BOOL keyboardVisible;
 }
 
 @end
@@ -32,6 +35,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    keyboardVisible = NO;
+    kOFFSET_FOR_KEYBOARD = 120.0;
+    self.captionTextField.delegate = self;
     
     imageToSave = [[PFFile alloc]init];
     locationManager = [[CLLocationManager alloc] init];
@@ -53,11 +59,42 @@
     expirationChoices = @[@" ", @"1 hour",@"2 hours",@"4 hours",@"1 day",@"2 days", @"1 week", @"never"];
     [picker selectRow:0 inComponent:0 animated:YES];
 }
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    // unregister for keyboard notifications while not visible.
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+}
+
+
 - (IBAction)savePostPressed:(id)sender {
     // Save PFFile
     NSString *caption = self.captionTextField.text;
     
-    NSDate *expiration = [NSDate date];
+   /* NSDate *expiration = [NSDate date];
     
     if ([self.expiresField.text isEqualToString:@"1 hour"]) {
         expiration = [expiration dateByAddingTimeInterval:1*60*60];
@@ -73,7 +110,7 @@
         expiration = [expiration dateByAddingTimeInterval:7*24*60*60];
     } else {
         expiration = nil;
-    }
+    }*/
     
     [imageToSave saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
@@ -85,7 +122,7 @@
             [newPost setObject:imageToSave forKey:@"picture"];
             [newPost setObject:geoPoint forKey:@"location"];
             if (![self.expiresField.text isEqualToString:@"never"] && ![self.expiresField.text isEqualToString:@""]) {
-                [newPost setObject:expiration forKey:@"expiration"];
+                //[newPost setObject:expiration forKey:@"expiration"];
             }
             newPost[@"caption"] = caption;
             [newPost saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -117,9 +154,9 @@
 }
 
 - (IBAction)loadImagePressed:(id)sender {
-    if (imageToSave.name) {
-        [self.captionTextField resignFirstResponder];
-        return; 
+    if (keyboardVisible) {
+       [self.captionTextField resignFirstResponder];
+        return;
     }
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -139,12 +176,12 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *photo = info[UIImagePickerControllerEditedImage];
+    CGSize imageSize = CGSizeMake(280.0, 280.0);
+    photo = [self squareImageWithImage:photo scaledToSize:imageSize];
     // Launch post view controller here
-    NSData *imageData = UIImageJPEGRepresentation(photo, .05f);
+    NSData *imageData = UIImageJPEGRepresentation(photo, .20f);
     imageToSave = [PFFile fileWithName:@"PostPicture.jpg" data:imageData];
     [self.addImageButton setImage:photo forState:UIControlStateNormal];
-    self.addImageButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.addImageButton.imageView.clipsToBounds = YES;
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -155,10 +192,6 @@
     [locationManager stopUpdatingLocation];
 }
 
--(void)dismissKeyboard {
-    [self.captionTextField resignFirstResponder];
-    [self.expiresField resignFirstResponder];
-}
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     return expirationChoices.count;
@@ -176,5 +209,118 @@
     self.expiresField.text = expirationChoices[row];
     [self.expiresField resignFirstResponder];
 }
+
+- (UIImage *)squareImageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    double ratio;
+    double delta;
+    CGPoint offset;
+    
+    //make a new square size, that is the resized imaged width
+    CGSize sz = CGSizeMake(newSize.width, newSize.width);
+    
+    //figure out if the picture is landscape or portrait, then
+    //calculate scale factor and offset
+    if (image.size.width > image.size.height) {
+        ratio = newSize.width / image.size.width;
+        delta = (ratio*image.size.width - ratio*image.size.height);
+        offset = CGPointMake(delta/2, 0);
+    } else {
+        ratio = newSize.width / image.size.height;
+        delta = (ratio*image.size.height - ratio*image.size.width);
+        offset = CGPointMake(0, delta/2);
+    }
+    
+    //make the final clipping rect based on the calculated values
+    CGRect clipRect = CGRectMake(-offset.x, -offset.y,
+                                 (ratio * image.size.width) + delta,
+                                 (ratio * image.size.height) + delta);
+    
+    
+    //start a new context, with scale factor 0.0 so retina displays get
+    //high quality image
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        UIGraphicsBeginImageContextWithOptions(sz, YES, 0.0);
+    } else {
+        UIGraphicsBeginImageContext(sz);
+    }
+    UIRectClip(clipRect);
+    [image drawInRect:clipRect];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
+-(void)dismissKeyboard {
+    [self.captionTextField resignFirstResponder];
+    [self.expiresField resignFirstResponder];
+}
+
+-(void)keyboardWillShow {
+    keyboardVisible = YES;
+    // Animate the current view out of the way
+    if (self.view.frame.origin.y >= 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+-(void)keyboardWillHide {
+    keyboardVisible = NO;
+    if (self.view.frame.origin.y >= 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+/*
+-(void)textFieldDidBeginEditing:(UITextField *)sender
+{
+    if  (self.view.frame.origin.y >= 0)
+    {
+            [self setViewMovedUp:YES];
+    }
+}
+*/
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSLog(@"Return Pressed");
+    [self.captionTextField resignFirstResponder];
+    return YES;
+}
+
+//method to move the view up/down whenever the keyboard is shown/dismissed
+-(void)setViewMovedUp:(BOOL)movedUp
+{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3]; // if you want to slide up the view
+    
+    CGRect rect = self.view.frame;
+    if (movedUp)
+    {
+        // 1. move the view's origin up so that the text field that will be hidden come above the keyboard
+        // 2. increase the size of the view so that the area behind the keyboard is covered up.
+        rect.origin.y -= kOFFSET_FOR_KEYBOARD;
+        rect.size.height += kOFFSET_FOR_KEYBOARD;
+    }
+    else
+    {
+        // revert back to the normal state.
+        rect.origin.y += kOFFSET_FOR_KEYBOARD;
+        rect.size.height -= kOFFSET_FOR_KEYBOARD;
+    }
+    self.view.frame = rect;
+    
+    [UIView commitAnimations];
+}
+
 
 @end
