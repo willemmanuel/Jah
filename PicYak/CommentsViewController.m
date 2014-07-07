@@ -90,7 +90,6 @@
 }
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
-    NSLog(@"Began Refreshing");
     [self loadComments];
     [refreshControl endRefreshing];
 }
@@ -200,10 +199,10 @@
     if(indexPath.section == 1){
         Comment *currentComment = [comments objectAtIndex:indexPath.row];
         CGSize constraint = CGSizeMake(280.0f, 20000.0f);
-        CGSize size = [currentComment.comment sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
+        CGSize size = [currentComment.comment sizeWithFont:[UIFont systemFontOfSize:16] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
         return 28+size.height;
     }
-    else return 280.0;
+    else return 320.0;
 }
 - (void) hideKeyboard{
     if(keyboardVisible == YES){
@@ -215,7 +214,6 @@
 
 -(void)keyboardWillShow {
     // Animate the current view out of the way
-    NSLog(@"KEYBOARD WILL SHOW");
     if (self.view.frame.origin.y >= 0)
     {
         [self setViewMovedUp:YES];
@@ -227,7 +225,6 @@
 }
 
 -(void)keyboardWillHide {
-    NSLog(@"Keyboard hiding");
     if (self.view.frame.origin.y >= 0)
     {
         [self setViewMovedUp:YES];
@@ -240,7 +237,6 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)sender
 {
-    NSLog(@"DID begin editing");
     keyboardVisible = YES;
     if  (self.view.frame.origin.y >= 0)
     {
@@ -253,7 +249,6 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    NSLog(@"Should Return");
     keyboardVisible = NO;
     [self.commentTextField endEditing:YES];
     [self setViewMovedUp:NO];

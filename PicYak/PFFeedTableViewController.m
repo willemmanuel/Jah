@@ -110,14 +110,18 @@
     [mainQuery whereKey:@"location" withinGeoBoxFromSouthwest:southWest toNortheast:northEast];
     [mainQuery orderByDescending:@"createdAt"];
     [mainQuery setLimit:6];
-    [mainQuery setSkip:_objects.count];
+    if(_isRefreshing){
+        [mainQuery setSkip:0];
+    }
+    else [mainQuery setSkip:_objects.count];
+    //[mainQuery setSkip:_objects.count];
     _isLoading = YES;
     [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         _isLoading = NO;
         if (_isRefreshing) {
             [_objects removeAllObjects];
+            //[self.tableView reloadData];
             _isRefreshing = NO;
-            [self.tableView reloadData];
         }
         if (!error) {
             for (PFObject *object in objects) {

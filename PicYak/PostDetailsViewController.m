@@ -292,7 +292,6 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    NSLog(@"Return Pressed");
     [self.captionTextField resignFirstResponder];
     return YES;
 }
