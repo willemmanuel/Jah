@@ -166,9 +166,10 @@
         imagePicker.showsCameraControls = YES;
         imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
         
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(10, 50, 100, 30)];
+        CGRect screenRect = [[UIScreen mainScreen] bounds];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(220, screenRect.size.height-50.0, 100, 30)];
         [button setTitle:@"Library" forState:UIControlStateNormal];
-        [button setBackgroundColor:[UIColor darkGrayColor]];
+        [button setBackgroundColor:[UIColor clearColor]];
         [button addTarget:self action:@selector(gotoLibrary:) forControlEvents:UIControlEventTouchUpInside];
         
         [imagePicker.view addSubview:button];
