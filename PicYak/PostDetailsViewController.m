@@ -17,6 +17,8 @@
     NSArray *expirationChoices;
     double kOFFSET_FOR_KEYBOARD;
     BOOL keyboardVisible;
+    UIImagePickerController *imagePicker;
+    UIImagePickerController *libraryPicker;
 }
 
 @end
@@ -158,23 +160,43 @@
        [self.captionTextField resignFirstResponder];
         return;
     }
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    imagePicker = [[UIImagePickerController alloc] init];
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        picker.showsCameraControls = YES;
-        picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        imagePicker.showsCameraControls = YES;
+        imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(10, 50, 100, 30)];
+        [button setTitle:@"Library" forState:UIControlStateNormal];
+        [button setBackgroundColor:[UIColor darkGrayColor]];
+        [button addTarget:self action:@selector(gotoLibrary:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [imagePicker.view addSubview:button];
+        
     } else {
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
-    picker.delegate = self;
-    picker.allowsEditing = YES;
+    imagePicker.delegate = self;
+    imagePicker.allowsEditing = YES;
     [locationManager startUpdatingLocation];
-    [self presentViewController:picker animated:YES completion:NULL];
+    [self presentViewController:imagePicker animated:YES completion:NULL];
 }
+-(IBAction)gotoLibrary:(id)sender
+{
+    libraryPicker = [[UIImagePickerController alloc] init];
+    libraryPicker.allowsEditing = YES;
+    [libraryPicker.view setFrame:CGRectMake(0, 80, 320, 350)];
+    [libraryPicker setSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
+    [libraryPicker setDelegate:self];
+    
+    [imagePicker presentViewController:libraryPicker animated:YES completion:nil];
+}
+
 
 # pragma mark - UIImagePickerControllerDelegate methods
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+- (void)imagePickerController:(UIImagePickerController *)completePicker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+
     UIImage *photo = info[UIImagePickerControllerEditedImage];
     CGSize imageSize = CGSizeMake(280.0, 280.0);
     photo = [self squareImageWithImage:photo scaledToSize:imageSize];
@@ -182,10 +204,13 @@
     NSData *imageData = UIImageJPEGRepresentation(photo, .20f);
     imageToSave = [PFFile fileWithName:@"PostPicture.jpg" data:imageData];
     [self.addImageButton setImage:photo forState:UIControlStateNormal];
-    [picker dismissViewControllerAnimated:YES completion:NULL];
+    if(libraryPicker != NULL){
+         [libraryPicker dismissViewControllerAnimated:NO completion:NULL];
+    }
+     [imagePicker dismissViewControllerAnimated:YES completion:NULL];
 }
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [picker dismissViewControllerAnimated:YES completion:NULL];
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)cancelPicker {
+    [cancelPicker dismissViewControllerAnimated:YES completion:NULL];
 }
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     currentLocation = [locations lastObject];
