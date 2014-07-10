@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7233CC9B195FD12300B5289D"
-               BuildableName = "PicYak.app"
-               BlueprintName = "PicYak"
-               ReferencedContainer = "container:PicYak.xcodeproj">
+               BuildableName = "Jah.app"
+               BlueprintName = "Jah"
+               ReferencedContainer = "container:Jah.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7233CCBC195FD12300B5289D"
-               BuildableName = "PicYakTests.xctest"
-               BlueprintName = "PicYakTests"
-               ReferencedContainer = "container:PicYak.xcodeproj">
+               BuildableName = "JahTests.xctest"
+               BlueprintName = "JahTests"
+               ReferencedContainer = "container:Jah.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7233CC9B195FD12300B5289D"
-            BuildableName = "PicYak.app"
-            BlueprintName = "PicYak"
-            ReferencedContainer = "container:PicYak.xcodeproj">
+            BuildableName = "Jah.app"
+            BlueprintName = "Jah"
+            ReferencedContainer = "container:Jah.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7233CC9B195FD12300B5289D"
-            BuildableName = "PicYak.app"
-            BlueprintName = "PicYak"
-            ReferencedContainer = "container:PicYak.xcodeproj">
+            BuildableName = "Jah.app"
+            BlueprintName = "Jah"
+            ReferencedContainer = "container:Jah.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7233CC9B195FD12300B5289D"
-            BuildableName = "PicYak.app"
-            BlueprintName = "PicYak"
-            ReferencedContainer = "container:PicYak.xcodeproj">
+            BuildableName = "Jah.app"
+            BlueprintName = "Jah"
+            ReferencedContainer = "container:Jah.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

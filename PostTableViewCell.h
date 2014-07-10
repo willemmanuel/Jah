@@ -11,8 +11,8 @@
 @class PostTableViewCell;
 @protocol PostTableViewCellDelegate <NSObject>
 @optional
--(void)upvoteTapped:(PostTableViewCell*)cell;
--(void)downvoteTapped:(PostTableViewCell*)cell;
+-(NSString *)upvoteTapped:(PostTableViewCell*)cell withPostId:(NSString*)postId;
+-(NSString *)downvoteTapped:(PostTableViewCell*)cell withPostId:(NSString*)postId;
 @end
 
 @interface PostTableViewCell : UITableViewCell

@@ -17,8 +17,11 @@
     NSArray *expirationChoices;
     double kOFFSET_FOR_KEYBOARD;
     BOOL keyboardVisible;
+    BOOL setImage;
     UIImagePickerController *imagePicker;
     UIImagePickerController *libraryPicker;
+    NSString *uniqueDeviceIdentifier;
+    
 }
 
 @end
@@ -37,10 +40,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    setImage = NO;
     keyboardVisible = NO;
-    kOFFSET_FOR_KEYBOARD = 120.0;
+    kOFFSET_FOR_KEYBOARD = 140.0;
     self.captionTextField.delegate = self;
     
+    uniqueDeviceIdentifier = [UIDevice currentDevice].identifierForVendor.UUIDString;
     imageToSave = [[PFFile alloc]init];
     locationManager = [[CLLocationManager alloc] init];
     
@@ -53,13 +58,16 @@
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
-    [self.addImageButton setImage:[UIImage imageNamed:@"Camera.png"] forState:UIControlStateNormal];
+    [self.addImageButton setImage:[UIImage imageNamed:@"camera44.png"] forState:UIControlStateNormal];
     UIPickerView *picker = [[UIPickerView alloc] init];
     picker.dataSource = self;
     picker.delegate = self;
     self.expiresField.inputView = picker;
     expirationChoices = @[@" ", @"1 hour",@"2 hours",@"4 hours",@"1 day",@"2 days", @"1 week", @"never"];
     [picker selectRow:0 inComponent:0 animated:YES];
+    
+     
+
 }
 
 
@@ -93,8 +101,6 @@
 
 
 - (IBAction)savePostPressed:(id)sender {
-    // Save PFFile
-    NSString *caption = self.captionTextField.text;
     
    /* NSDate *expiration = [NSDate date];
     
@@ -114,6 +120,15 @@
         expiration = nil;
     }*/
     
+    // Save PFFile
+    if(!setImage){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops" message:@"You can't submit a post with no photo jah feel?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+        [alert show];
+        
+    }
+    else{
+    NSString *caption = self.captionTextField.text;
+    
     [imageToSave saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             CLLocationCoordinate2D coordinate = [currentLocation coordinate];
@@ -122,6 +137,9 @@
             // Create a PFObject around a PFFile and associate it with the current user
             PFObject *newPost = [PFObject objectWithClassName:@"Post"];
             [newPost setObject:imageToSave forKey:@"picture"];
+            newPost[@"score"] = @0;
+            newPost[@"reports"] = @0;
+            newPost[@"posterDeviceId"] = uniqueDeviceIdentifier;
             [newPost setObject:geoPoint forKey:@"location"];
             if (![self.expiresField.text isEqualToString:@"never"] && ![self.expiresField.text isEqualToString:@""]) {
                 //[newPost setObject:expiration forKey:@"expiration"];
@@ -129,7 +147,7 @@
             newPost[@"caption"] = caption;
             [newPost saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error) {
-                    [self.navigationController popToRootViewControllerAnimated:YES];
+                    
                 }
                 else{
                     NSLog(@"Error: %@ %@", error, [error userInfo]);
@@ -142,8 +160,11 @@
         }
     } progressBlock:^(int percentDone) {
         // Update your progress spinner here. percentDone will be between 0 and 100.
+               
     }];
-    self.captionTextField.text = @"";
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    //self.captionTextField.text = @"";
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -160,55 +181,72 @@
        [self.captionTextField resignFirstResponder];
         return;
     }
+    UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:
+                            @"Take Photo",
+                            @"Choose Existing",
+                            nil];
+    popup.tag = 1;
+    [popup showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+- (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
     imagePicker = [[UIImagePickerController alloc] init];
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        imagePicker.showsCameraControls = YES;
-        imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
-        
-        CGRect screenRect = [[UIScreen mainScreen] bounds];
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(220, screenRect.size.height-50.0, 100, 30)];
-        [button setTitle:@"Library" forState:UIControlStateNormal];
-        [button setBackgroundColor:[UIColor clearColor]];
-        [button addTarget:self action:@selector(gotoLibrary:) forControlEvents:UIControlEventTouchUpInside];
-        
-        [imagePicker.view addSubview:button];
-        
-    } else {
-        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    switch (popup.tag) {
+        case 1: {
+            switch (buttonIndex) {
+                case 0:{
+                    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+                        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                        imagePicker.showsCameraControls = YES;
+                        imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+                        imagePicker.delegate = self;
+                        imagePicker.allowsEditing = YES;
+                        [locationManager startUpdatingLocation];
+                        [self presentViewController:imagePicker animated:YES completion:NULL];
+                        break;
+                    }
+                    else {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops" message:@"Camera not available Jah feel?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+                        [alert show];
+                        break;
+                    }
+                    
+                    
+                    }
+                case 1:{
+                    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    imagePicker.delegate = self;
+                    imagePicker.allowsEditing = YES;
+                    [locationManager startUpdatingLocation];
+                    [self presentViewController:imagePicker animated:YES completion:NULL];
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
     }
-    imagePicker.delegate = self;
-    imagePicker.allowsEditing = YES;
-    [locationManager startUpdatingLocation];
-    [self presentViewController:imagePicker animated:YES completion:NULL];
 }
--(IBAction)gotoLibrary:(id)sender
-{
-    libraryPicker = [[UIImagePickerController alloc] init];
-    libraryPicker.allowsEditing = YES;
-    [libraryPicker.view setFrame:CGRectMake(0, 80, 320, 350)];
-    [libraryPicker setSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
-    [libraryPicker setDelegate:self];
-    
-    [imagePicker presentViewController:libraryPicker animated:YES completion:nil];
-}
+
 
 
 # pragma mark - UIImagePickerControllerDelegate methods
 
 - (void)imagePickerController:(UIImagePickerController *)completePicker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-
     UIImage *photo = info[UIImagePickerControllerEditedImage];
     CGSize imageSize = CGSizeMake(280.0, 280.0);
     photo = [self squareImageWithImage:photo scaledToSize:imageSize];
     // Launch post view controller here
-    NSData *imageData = UIImageJPEGRepresentation(photo, .20f);
+    NSData *imageData = UIImageJPEGRepresentation(photo, .6f);
     imageToSave = [PFFile fileWithName:@"PostPicture.jpg" data:imageData];
     [self.addImageButton setImage:photo forState:UIControlStateNormal];
-    if(libraryPicker != NULL){
-         [libraryPicker dismissViewControllerAnimated:NO completion:NULL];
-    }
+    self.addImageButton.layer.borderColor = [UIColor colorWithRed:.616 green:.792 blue:.875 alpha:1.0].CGColor;
+    self.addImageButton.layer.borderWidth = 6;
      [imagePicker dismissViewControllerAnimated:YES completion:NULL];
+    setImage = YES;
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)cancelPicker {
     [cancelPicker dismissViewControllerAnimated:YES completion:NULL];
@@ -234,6 +272,13 @@
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     self.expiresField.text = expirationChoices[row];
     [self.expiresField resignFirstResponder];
+}
+
+- (void)didTakePicture:(UIImage *)picture
+{
+    UIImage * flippedImage = [UIImage imageWithCGImage:picture.CGImage scale:picture.scale orientation:UIImageOrientationLeftMirrored];
+    
+    picture = flippedImage;
 }
 
 - (UIImage *)squareImageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {

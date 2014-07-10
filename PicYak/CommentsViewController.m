@@ -2,7 +2,7 @@
 //  CommentsViewController.m
 //  PicYak
 //
-//  Created by Rebecca Mignone on 7/6/14.
+//  Created by Thomas Mignone on 7/6/14.
 //  Copyright (c) 2014 Mignone. All rights reserved.
 //
 
@@ -11,15 +11,22 @@
 #import "CommentTableViewCell.h"
 #import <Parse/Parse.h>
 
+#import <sys/socket.h>
+#import <netinet/in.h>
+#import <arpa/inet.h>
+#import <netdb.h>
+#import <SystemConfiguration/SCNetworkReachability.h>
+
 @interface CommentsViewController (){
     NSMutableArray *comments;
+    NSMutableArray *commentVotes;
     UITextField *commentBox;
     UIButton *postButton;
-    
     CGFloat screenWidth;
     CGFloat screenHeight;
-    BOOL keyboardVisible;
     double kOFFSET_FOR_KEYBOARD;
+    UIImageView *emptyCommentsImage;
+    BOOL keyboardVisible;
 }
 
 @end
@@ -39,14 +46,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    commentVotes = [[NSMutableArray alloc] init];
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenWidth = screenRect.size.width;
     screenHeight = screenRect.size.height;
-
-   
-    CGFloat yPos = screenHeight - 114.0;
+    _isLoading = NO;
+    _isRefreshing = NO;
+    _processingVote = NO;
     
+    CGFloat yPos = screenHeight - 114.0;
     self.commentTextField = [[UIView alloc] initWithFrame:CGRectMake(0, yPos, 320, 50)];
+    //[self.commentTextField setBackgroundColor:[UIColor colorWithRed:88.0/256.0 green:202.0/256.0 blue:224.0/256.0 alpha:1.0]];
     [self.commentTextField setBackgroundColor:[UIColor colorWithRed:.616 green:.792 blue:.875 alpha:1.0]];
     
     commentBox = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 250, 30)];
@@ -60,9 +70,12 @@
     
     postButton = [[UIButton alloc] initWithFrame:CGRectMake(267, 10, 45, 30)];
     [postButton setBackgroundColor:[UIColor colorWithRed:28.0/256.0 green:93.0/256.0 blue:130.0/256.0 alpha:1.0]];
+    
     [postButton setTitle:@"Post" forState:UIControlStateNormal];
     postButton.titleLabel.font = [UIFont systemFontOfSize:15];
     [postButton addTarget:self action:@selector(postButtonPressed:) forControlEvents:UIControlEventTouchDown];
+    postButton.layer.cornerRadius = 5;
+    postButton.clipsToBounds = YES;
     [self.commentTextField addSubview:postButton];
     
     [self.view addSubview:self.commentTextField];
@@ -80,8 +93,88 @@
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents: UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     [self.tableView addObserver:self forKeyPath:@"contentSize" options:0 context:NULL];
+   // self.tableView.delegate = self;
+    //self.tableView.dataSource = self;
+    
+    emptyCommentsImage = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 325.0, self.view.frame.size.width, 40.0)];
+    [emptyCommentsImage setImage:[UIImage imageNamed:@"noComments.png"]];
+    emptyCommentsImage.contentMode = UIViewContentModeScaleAspectFit;
+    [self.tableView addSubview:emptyCommentsImage];
+    emptyCommentsImage.hidden = YES;
     self.refreshControl = refreshControl;
 }
+- (void) dealloc{
+    [self.tableView removeObserver:self forKeyPath:@"contentSize"];
+}
+- (IBAction)reportButtonPressed:(id)sender {
+    if (!keyboardVisible) {
+        UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Flag as Inappropriate" otherButtonTitles:nil];
+        popup.tag = 1;
+        [popup showInView:[UIApplication sharedApplication].keyWindow];
+    }
+    
+}
+
+- (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (popup.tag) {
+            
+        case 1: {
+            switch (buttonIndex) {
+                case 0:{
+                    
+                    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+                    [query getObjectInBackgroundWithId:self.post.postId block:^(PFObject *currentPost, NSError *error) {
+                        if(!error){
+                            
+                            int reportCount = [[currentPost objectForKey:@"reports"] intValue];
+                           
+                            NSManagedObjectContext *context = [self managedObjectContext];
+                            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Report"];
+                            NSMutableArray *reports = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+                            NSString *predicateString = [NSString stringWithFormat:@"post = '%@'", self.post.postId];
+                            NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+                            reports = [[reports filteredArrayUsingPredicate:testPredicate] mutableCopy];
+                            if(reports.count == 0){
+                                if (reportCount == 2) {
+                                    NSManagedObject *newReport = [NSEntityDescription insertNewObjectForEntityForName:@"Report" inManagedObjectContext:context];
+                                    [newReport setValue:self.post.postId forKey:@"post"];
+                                    NSError *error = nil;
+                                    if (![context save:&error]) {
+                                        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                                    }
+                                    [currentPost deleteInBackground];
+                                }
+                                else{
+                                    NSManagedObject *newReport = [NSEntityDescription insertNewObjectForEntityForName:@"Report" inManagedObjectContext:context];
+                                    [newReport setValue:self.post.postId forKey:@"post"];
+                                    NSError *error = nil;
+                                    if (![context save:&error]) {
+                                        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                                    }
+                                    [currentPost incrementKey:@"reports"];
+                                    [currentPost saveInBackground];
+                                }
+                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Thanks!" message:@"Your report has been submitted" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+                                [alert show];
+                            }
+                            else{
+                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops" message:@"You may only report a post once. We appreciate your help in making Jah a better community." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+                                [alert show];
+                            }
+                        }
+                    }];
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     CGRect frame = self.tableView.frame;
@@ -91,7 +184,7 @@
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
     [self loadComments];
-    [refreshControl endRefreshing];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -136,33 +229,56 @@
         [cell.commentLabel setText: currentComment.comment];
         cell.scoreLabel.text = [NSString stringWithFormat:@"%d", currentComment.score];
         cell.comment = currentComment;
+        cell.delegate = self;
         cell.dateLabel.text = currentComment.dateString;
+        if([self shouldHighlightUpArrow:cell.comment.commentId]){
+            [cell.upvoteButton setImage:[UIImage imageNamed:@"upvoteArrowHighlighted.png"] forState:UIControlStateNormal];
+        }
+        else [cell.upvoteButton setImage:[UIImage imageNamed:@"upvoteArrow.png"] forState:UIControlStateNormal];
+        
+        if([self shouldHighlightDownArrow:cell.comment.commentId]){
+            [cell.downvoteButton setImage:[UIImage imageNamed:@"downvoteArrowHighlighted.png"] forState:UIControlStateNormal];
+        }
+        else [cell.downvoteButton setImage:[UIImage imageNamed:@"downvoteArrow.png"] forState:UIControlStateNormal];
         return cell;
     }
 }
 
 -(void)loadComments {
-    if(!self.refreshControl.isRefreshing){
-        NSLog(@"POST ID: %@", self.post.postPFObject.objectId);
-        [comments removeAllObjects];
+    //if(!self.refreshControl.isRefreshing){
+    if (_isLoading) {
+        return;
+    }
+    
         PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
         //query.cachePolicy = kPFCachePolicyCacheThenNetwork;
         [query orderByAscending:@"createdAt"];
+    
         [query whereKey:@"postId" equalTo:self.post.postPFObject];
+        _isLoading = YES;
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            _isLoading = NO;
             if (error) {
                 NSLog(@"Something went wrong with the comments query. We should probably do something here");
-            } else {
+            }
+            else {
+                [comments removeAllObjects];
                 for (PFObject *object in objects) {
-                    NSLog(@"%@", object[@"comment"]);
                     Comment *newComment = [[Comment alloc] initWithObject:object];
                     [comments addObject:newComment];
-                    [self.tableView reloadData];
+                    //[self.tableView reloadData];
                 }
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    [self.tableView reloadData];
+                });
             }
-            
+            [self.refreshControl endRefreshing];
+            if(comments.count == 0){
+                NSLog(@"Showing empty comments view");
+                emptyCommentsImage.hidden = NO;
+            }
+            else emptyCommentsImage.hidden = YES;
         }];
-    }
 }
 
 - (IBAction)postButtonPressed:(id)sender {
@@ -195,14 +311,14 @@
 }
 
 
--(float) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if(indexPath.section == 1){
         Comment *currentComment = [comments objectAtIndex:indexPath.row];
         CGSize constraint = CGSizeMake(280.0f, 20000.0f);
-        CGSize size = [currentComment.comment sizeWithFont:[UIFont systemFontOfSize:16] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
-        return 28+size.height;
+        CGSize size = [currentComment.comment sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
+        return 31.0+size.height;
     }
-    else return 320.0;
+    else return 325.0;
 }
 - (void) hideKeyboard{
     if(keyboardVisible == YES){
@@ -252,11 +368,6 @@
     keyboardVisible = NO;
     [self.commentTextField endEditing:YES];
     [self setViewMovedUp:NO];
-    //[self.commentTextField resignFirstResponder];
-   // if  (self.view.frame.origin.y <= 0)
-   // {
-   //     [self.commentTextField resignFirstResponder];
-   // }
     return YES;
 }
 
@@ -283,6 +394,221 @@
     self.view.frame = rect;
     
     [UIView commitAnimations];
+}
+
+# pragma mark - upvote/downvote delegate methods
+
+- (NSManagedObjectContext *)managedObjectContext {
+    NSManagedObjectContext *context = nil;
+    id delegate = [[UIApplication sharedApplication] delegate];
+    if ([delegate performSelector:@selector(managedObjectContext)]) {
+        context = [delegate managedObjectContext];
+    }
+    return context;
+}
+- (BOOL) shouldHighlightUpArrow:(NSString *)commentId{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"CommentVote"];
+    commentVotes = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    NSString *predicateString = [NSString stringWithFormat:@"comment = '%@'", commentId];
+    NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+    commentVotes = [[commentVotes filteredArrayUsingPredicate:testPredicate] mutableCopy];
+    
+    for (NSManagedObject *currentPost in commentVotes) {
+        if([[currentPost valueForKey:@"upvote"]  isEqual: @1]){
+            return YES;
+        }
+        else return NO;
+    }
+    return NO;
+}
+- (BOOL) shouldHighlightDownArrow:(NSString *)commentId{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"CommentVote"];
+    commentVotes = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    NSString *predicateString = [NSString stringWithFormat:@"comment = '%@'", commentId];
+    NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+    commentVotes = [[commentVotes filteredArrayUsingPredicate:testPredicate] mutableCopy];
+    
+    for (NSManagedObject *currentPost in commentVotes) {
+        if([[currentPost valueForKey:@"upvote"]  isEqual: @0]){
+            return YES;
+        }
+        else return NO;
+    }
+    return NO;
+}
+//Returns 1 if it should highlight the button and increment the score by 1
+//Returns 2 if it should NOT highlight the button and decrement the score by 1
+//Returns 3 if it should highlight the button and increment the score by 2
+-  (NSString *) upvoteTapped:(id)sender withCommentId:(NSString *)commentId{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"CommentVote"];
+    commentVotes = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    NSString *predicateString = [NSString stringWithFormat:@"comment = '%@'", commentId];
+    NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+    commentVotes = [[commentVotes filteredArrayUsingPredicate:testPredicate] mutableCopy];
+
+    _processingVote = YES;
+    if([self connectedToNetwork]){
+        if (commentVotes.count == 0) {
+            NSManagedObject *newVote = [NSEntityDescription insertNewObjectForEntityForName:@"CommentVote" inManagedObjectContext:context];
+            [newVote setValue:commentId forKey:@"comment"];
+            [newVote setValue:@YES forKey:@"upvote"];
+            NSError *error = nil;
+            if (![context save:&error]) {
+                NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+            }
+            else{
+                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                [query getObjectInBackgroundWithId:commentId block:^(PFObject *post, NSError *error) {
+                    [post incrementKey:@"score"];
+                    [post saveInBackground];
+                }];
+                _processingVote = NO;
+                return @"1";
+            }
+        }
+        
+        else {
+            for (NSManagedObject *currentPost in commentVotes) {
+                if([[currentPost valueForKey:@"upvote"]  isEqual: @1]) {
+                    [context deleteObject:currentPost];
+                    NSError *error = nil;
+                    if (![context save:&error]) {
+                        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                    }
+                    PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                    [query getObjectInBackgroundWithId:commentId block:^(PFObject *post, NSError *error) {
+                        [post incrementKey:@"score" byAmount:@-1];
+                        [post saveInBackground];
+                    }];
+                    _processingVote = NO;
+                    return @"2";
+                }
+                else{
+                    [currentPost setValue:@YES forKey:@"upvote"];
+                    NSError *error = nil;
+                    if (![context save:&error]) {
+                        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                    }
+                    PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                    [query getObjectInBackgroundWithId:commentId block:^(PFObject *post, NSError *error) {
+                        [post incrementKey:@"score" byAmount:@2];
+                        [post saveInBackground];
+                    }];
+                    _processingVote = NO;
+                    return @"3";
+                }
+            }
+        }
+    }
+    else {
+        _processingVote = NO;
+        return @"0";
+    }
+    _processingVote = NO;
+    return @"0";
+}
+
+//Returns 1 if it should highlight the button and decrement the score by 1
+//Returns 2 if it should NOT highlight the button and increment the score by 1
+//Returns 3 if it should highlight the button and decrement the score by 2
+-  (NSString *) downvoteTapped:(id)sender withCommentId:(NSString *)commentId{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"CommentVote"];
+    commentVotes = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    NSString *predicateString = [NSString stringWithFormat:@"comment = '%@'", commentId];
+    NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+    commentVotes = [[commentVotes filteredArrayUsingPredicate:testPredicate] mutableCopy];
+    
+    _processingVote = YES;
+    if([self connectedToNetwork]){
+        if (commentVotes.count == 0) {
+            NSManagedObject *newVote = [NSEntityDescription insertNewObjectForEntityForName:@"CommentVote" inManagedObjectContext:context];
+            [newVote setValue:commentId forKey:@"comment"];
+            [newVote setValue:@NO forKey:@"upvote"];
+            NSError *error = nil;
+            if (![context save:&error]) {
+                NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+            }
+            else{
+                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                [query getObjectInBackgroundWithId:commentId block:^(PFObject *post, NSError *error) {
+                    [post incrementKey:@"score" byAmount:@-1];
+                    [post saveInBackground];
+                }];
+                _processingVote = NO;
+                return @"1";
+            }
+        }
+        
+        else {
+            for (NSManagedObject *currentPost in commentVotes) {
+                if([[currentPost valueForKey:@"upvote"]  isEqual: @0]) {
+                    [context deleteObject:currentPost];
+                    NSError *error = nil;
+                    if (![context save:&error]) {
+                        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                    }
+                    PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                    [query getObjectInBackgroundWithId:commentId block:^(PFObject *post, NSError *error) {
+                        [post incrementKey:@"score"];
+                        [post saveInBackground];
+                    }];
+                    _processingVote = NO;
+                    return @"2";
+                }
+                else{
+                    [currentPost setValue:@NO forKey:@"upvote"];
+                    NSError *error = nil;
+                    if (![context save:&error]) {
+                        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                    }
+                    PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+                    [query getObjectInBackgroundWithId:commentId block:^(PFObject *post, NSError *error) {
+                        [post incrementKey:@"score" byAmount:@-2];
+                        [post saveInBackground];
+                    }];
+                    _processingVote = NO;
+                    return @"3";
+                }
+            }
+        }
+    }
+    else {
+        _processingVote = NO;
+        return @"0";
+    }
+    _processingVote = NO;
+    return @"0";
+}
+
+- (BOOL) connectedToNetwork
+{
+	// Create zero addy
+	struct sockaddr_in zeroAddress;
+	bzero(&zeroAddress, sizeof(zeroAddress));
+	zeroAddress.sin_len = sizeof(zeroAddress);
+	zeroAddress.sin_family = AF_INET;
+    
+	// Recover reachability flags
+	SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&zeroAddress);
+	SCNetworkReachabilityFlags flags;
+    
+	BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags);
+	CFRelease(defaultRouteReachability);
+    
+	if (!didRetrieveFlags)
+	{
+		return NO;
+	}
+    
+	BOOL isReachable = flags & kSCNetworkFlagsReachable;
+	BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
+	return (isReachable && !needsConnection) ? YES : NO;
 }
 
 @end

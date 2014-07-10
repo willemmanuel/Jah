@@ -13,7 +13,11 @@
 
 @interface PFFeedTableViewController : UITableViewController <UIImagePickerControllerDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate, PostTableViewCellDelegate>
 
-@property (nonatomic) BOOL isLoading;
-@property (nonatomic) BOOL isRefreshing;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+@property (nonatomic) BOOL newPostsAreLoading;
+@property (nonatomic) BOOL topPostsAreLoading;
+@property (nonatomic) BOOL newPostsAreRefreshing;
+@property (nonatomic) BOOL topPostsAreRefreshing;
+@property (nonatomic) BOOL processingVote;
 
 @end

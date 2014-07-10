@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		72135C301968ED840057E95E /* CommentPictureTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 72135C2F1968ED840057E95E /* CommentPictureTableViewCell.m */; };
 		72135C331969C8950057E95E /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72135C321969C8950057E95E /* CommentsViewController.m */; };
+		72135C3A196A708B0057E95E /* downvoteArrowHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 72135C38196A708B0057E95E /* downvoteArrowHighlighted.png */; };
+		72135C3B196A708B0057E95E /* upvoteArrowHighlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 72135C39196A708B0057E95E /* upvoteArrowHighlighted.png */; };
+		72135C40196AE5CE0057E95E /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 72135C3F196AE5CE0057E95E /* clock.png */; };
 		7233CCA0195FD12300B5289D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CC9F195FD12300B5289D /* Foundation.framework */; };
 		7233CCA2195FD12300B5289D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCA1195FD12300B5289D /* CoreGraphics.framework */; };
 		7233CCA4195FD12300B5289D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7233CCA3195FD12300B5289D /* UIKit.framework */; };
@@ -39,7 +42,9 @@
 		7233CCF81960F9E000B5289D /* PostDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7233CCF71960F9E000B5289D /* PostDetailsViewController.m */; };
 		7233CD03196114C700B5289D /* downvoteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7233CD01196114C700B5289D /* downvoteArrow.png */; };
 		7233CD04196114C700B5289D /* upvoteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 7233CD02196114C700B5289D /* upvoteArrow.png */; };
-		BE3D4A361963B1FA002F01D2 /* Camera.png in Resources */ = {isa = PBXBuildFile; fileRef = BE3D4A351963B1FA002F01D2 /* Camera.png */; };
+		7240CDB2196E624500E54944 /* camera44.png in Resources */ = {isa = PBXBuildFile; fileRef = 7240CDB1196E624500E54944 /* camera44.png */; };
+		72C2FB52196BB6650083FD82 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 72C2FB51196BB6650083FD82 /* empty.png */; };
+		72C2FB54196BBCCE0083FD82 /* noComments.png in Resources */ = {isa = PBXBuildFile; fileRef = 72C2FB53196BBCCE0083FD82 /* noComments.png */; };
 		BE3D4A391964AA32002F01D2 /* PFFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3D4A381964AA32002F01D2 /* PFFeedTableViewController.m */; };
 		BE504A281960553E004E92F9 /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A271960553E004E92F9 /* CommentTableViewCell.m */; };
 		BE504A2B19605AF7004E92F9 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = BE504A2A19605AF7004E92F9 /* Comment.m */; };
@@ -55,13 +60,6 @@
 			remoteGlobalIDString = 7233CC9B195FD12300B5289D;
 			remoteInfo = PicYak;
 		};
-		BE3D4A3F19661F47002F01D2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6A5D9A1015E0152D001FAD14;
-			remoteInfo = DLCImagePickerController;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -69,23 +67,26 @@
 		72135C2F1968ED840057E95E /* CommentPictureTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentPictureTableViewCell.m; sourceTree = "<group>"; };
 		72135C311969C8950057E95E /* CommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsViewController.h; sourceTree = "<group>"; };
 		72135C321969C8950057E95E /* CommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsViewController.m; sourceTree = "<group>"; };
-		7233CC9C195FD12300B5289D /* PicYak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PicYak.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		72135C38196A708B0057E95E /* downvoteArrowHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downvoteArrowHighlighted.png; sourceTree = "<group>"; };
+		72135C39196A708B0057E95E /* upvoteArrowHighlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upvoteArrowHighlighted.png; sourceTree = "<group>"; };
+		72135C3F196AE5CE0057E95E /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock.png; sourceTree = "<group>"; };
+		7233CC9C195FD12300B5289D /* Jah.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jah.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7233CC9F195FD12300B5289D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7233CCA1195FD12300B5289D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7233CCA3195FD12300B5289D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		7233CCA7195FD12300B5289D /* PicYak-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PicYak-Info.plist"; sourceTree = "<group>"; };
+		7233CCA7195FD12300B5289D /* Jah-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Jah-Info.plist"; sourceTree = "<group>"; };
 		7233CCA9195FD12300B5289D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7233CCAB195FD12300B5289D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		7233CCAD195FD12300B5289D /* PicYak-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PicYak-Prefix.pch"; sourceTree = "<group>"; };
+		7233CCAD195FD12300B5289D /* Jah-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Jah-Prefix.pch"; sourceTree = "<group>"; };
 		7233CCAE195FD12300B5289D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7233CCAF195FD12300B5289D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		7233CCB2195FD12300B5289D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7233CCB7195FD12300B5289D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		7233CCBD195FD12300B5289D /* PicYakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PicYakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7233CCBD195FD12300B5289D /* JahTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JahTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7233CCBE195FD12300B5289D /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		7233CCC6195FD12300B5289D /* PicYakTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PicYakTests-Info.plist"; sourceTree = "<group>"; };
+		7233CCC6195FD12300B5289D /* JahTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JahTests-Info.plist"; sourceTree = "<group>"; };
 		7233CCC8195FD12300B5289D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7233CCCA195FD12300B5289D /* PicYakTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PicYakTests.m; sourceTree = "<group>"; };
+		7233CCCA195FD12300B5289D /* PicYakTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PicYakTests.m; path = PicYakTests/PicYakTests.m; sourceTree = "<group>"; };
 		7233CCD4195FD12300B5289D /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = PicYak/Parse.framework; sourceTree = "<group>"; };
 		7233CCD6195FD12300B5289D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7233CCD8195FD12300B5289D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -106,10 +107,11 @@
 		7233CCF71960F9E000B5289D /* PostDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostDetailsViewController.m; sourceTree = "<group>"; };
 		7233CD01196114C700B5289D /* downvoteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downvoteArrow.png; sourceTree = "<group>"; };
 		7233CD02196114C700B5289D /* upvoteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upvoteArrow.png; sourceTree = "<group>"; };
-		BE3D4A351963B1FA002F01D2 /* Camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Camera.png; sourceTree = "<group>"; };
+		7240CDB1196E624500E54944 /* camera44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera44.png; sourceTree = "<group>"; };
+		72C2FB51196BB6650083FD82 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
+		72C2FB53196BBCCE0083FD82 /* noComments.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noComments.png; sourceTree = "<group>"; };
 		BE3D4A371964AA32002F01D2 /* PFFeedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PFFeedTableViewController.h; sourceTree = "<group>"; };
 		BE3D4A381964AA32002F01D2 /* PFFeedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PFFeedTableViewController.m; sourceTree = "<group>"; };
-		BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DLCImagePickerController.xcodeproj; path = "PicYak/DLCImagePickerController-master/DLCImagePickerController.xcodeproj"; sourceTree = "<group>"; };
 		BE504A261960553E004E92F9 /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentTableViewCell.h; sourceTree = "<group>"; };
 		BE504A271960553E004E92F9 /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentTableViewCell.m; sourceTree = "<group>"; };
 		BE504A2919605AF7004E92F9 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
@@ -155,12 +157,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		72135C68196B9E370057E95E /* Jah */ = {
+			isa = PBXGroup;
+			children = (
+				7233CCAE195FD12300B5289D /* AppDelegate.h */,
+				7233CCAF195FD12300B5289D /* AppDelegate.m */,
+				7233CCB1195FD12300B5289D /* Main.storyboard */,
+				7233CCB7195FD12300B5289D /* Images.xcassets */,
+				BE504A2C19605BDC004E92F9 /* Comments */,
+				BE504A2D19605BE4004E92F9 /* Posts */,
+				7233CCFC1961033800B5289D /* Icons */,
+				7233CCA6195FD12300B5289D /* Supporting Files */,
+			);
+			name = Jah;
+			path = PicYak;
+			sourceTree = "<group>";
+		};
+		72135C69196B9E920057E95E /* JahTests */ = {
+			isa = PBXGroup;
+			children = (
+				7233CCCA195FD12300B5289D /* PicYakTests.m */,
+				7233CCC5195FD12300B5289D /* Supporting Files */,
+			);
+			name = JahTests;
+			sourceTree = "<group>";
+		};
 		7233CC93195FD12300B5289D = {
 			isa = PBXGroup;
 			children = (
 				BE526DD5196A4FE900B802B6 /* VoteData.xcdatamodeld */,
-				7233CCA5195FD12300B5289D /* PicYak */,
-				7233CCC4195FD12300B5289D /* PicYakTests */,
+				72135C68196B9E370057E95E /* Jah */,
+				72135C69196B9E920057E95E /* JahTests */,
 				7233CC9E195FD12300B5289D /* Frameworks */,
 				7233CC9D195FD12300B5289D /* Products */,
 			);
@@ -169,8 +196,8 @@
 		7233CC9D195FD12300B5289D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7233CC9C195FD12300B5289D /* PicYak.app */,
-				7233CCBD195FD12300B5289D /* PicYakTests.xctest */,
+				7233CC9C195FD12300B5289D /* Jah.app */,
+				7233CCBD195FD12300B5289D /* JahTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -179,7 +206,6 @@
 			isa = PBXGroup;
 			children = (
 				BEC6F63D196A577A004D9E40 /* CoreData.framework */,
-				BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */,
 				7233CCEA195FD12300B5289D /* Twitter.framework */,
 				7233CCE8195FD12300B5289D /* Social.framework */,
 				7233CCE6195FD12300B5289D /* SystemConfiguration.framework */,
@@ -200,76 +226,51 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7233CCA5195FD12300B5289D /* PicYak */ = {
-			isa = PBXGroup;
-			children = (
-				7233CCAE195FD12300B5289D /* AppDelegate.h */,
-				7233CCAF195FD12300B5289D /* AppDelegate.m */,
-				7233CCB1195FD12300B5289D /* Main.storyboard */,
-				7233CCB7195FD12300B5289D /* Images.xcassets */,
-				BE504A2C19605BDC004E92F9 /* Comments */,
-				BE504A2D19605BE4004E92F9 /* Posts */,
-				7233CCA6195FD12300B5289D /* Supporting Files */,
-			);
-			path = PicYak;
-			sourceTree = "<group>";
-		};
 		7233CCA6195FD12300B5289D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7233CCA7195FD12300B5289D /* PicYak-Info.plist */,
+				7233CCA7195FD12300B5289D /* Jah-Info.plist */,
 				7233CCA8195FD12300B5289D /* InfoPlist.strings */,
 				7233CCAB195FD12300B5289D /* main.m */,
-				7233CCAD195FD12300B5289D /* PicYak-Prefix.pch */,
+				7233CCAD195FD12300B5289D /* Jah-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		7233CCC4195FD12300B5289D /* PicYakTests */ = {
-			isa = PBXGroup;
-			children = (
-				7233CCCA195FD12300B5289D /* PicYakTests.m */,
-				7233CCC5195FD12300B5289D /* Supporting Files */,
-			);
-			path = PicYakTests;
 			sourceTree = "<group>";
 		};
 		7233CCC5195FD12300B5289D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7233CCC6195FD12300B5289D /* PicYakTests-Info.plist */,
+				7233CCC6195FD12300B5289D /* JahTests-Info.plist */,
 				7233CCC7195FD12300B5289D /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			path = PicYakTests;
 			sourceTree = "<group>";
 		};
 		7233CCFC1961033800B5289D /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				BE3D4A351963B1FA002F01D2 /* Camera.png */,
+				72C2FB53196BBCCE0083FD82 /* noComments.png */,
+				72C2FB51196BB6650083FD82 /* empty.png */,
+				72135C3F196AE5CE0057E95E /* clock.png */,
+				72135C38196A708B0057E95E /* downvoteArrowHighlighted.png */,
+				7240CDB1196E624500E54944 /* camera44.png */,
+				72135C39196A708B0057E95E /* upvoteArrowHighlighted.png */,
 				7233CD01196114C700B5289D /* downvoteArrow.png */,
 				7233CD02196114C700B5289D /* upvoteArrow.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
 		};
-		BE3D4A3B19661F47002F01D2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BE3D4A4019661F47002F01D2 /* DLCImagePickerController.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		BE504A2C19605BDC004E92F9 /* Comments */ = {
 			isa = PBXGroup;
 			children = (
+				72135C311969C8950057E95E /* CommentsViewController.h */,
+				72135C321969C8950057E95E /* CommentsViewController.m */,
 				72135C2E1968ED840057E95E /* CommentPictureTableViewCell.h */,
 				72135C2F1968ED840057E95E /* CommentPictureTableViewCell.m */,
 				BE504A261960553E004E92F9 /* CommentTableViewCell.h */,
 				BE504A271960553E004E92F9 /* CommentTableViewCell.m */,
-				72135C311969C8950057E95E /* CommentsViewController.h */,
-				72135C321969C8950057E95E /* CommentsViewController.m */,
 				BE504A2919605AF7004E92F9 /* Comment.h */,
 				BE504A2A19605AF7004E92F9 /* Comment.m */,
 			);
@@ -287,7 +288,6 @@
 				7233CCF1195FD12300B5289D /* PostTableViewCell.m */,
 				7233CCF3195FD20800B5289D /* Post.h */,
 				7233CCF4195FD20800B5289D /* Post.m */,
-				7233CCFC1961033800B5289D /* Icons */,
 			);
 			name = Posts;
 			sourceTree = "<group>";
@@ -295,9 +295,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7233CC9B195FD12300B5289D /* PicYak */ = {
+		7233CC9B195FD12300B5289D /* Jah */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7233CCCE195FD12300B5289D /* Build configuration list for PBXNativeTarget "PicYak" */;
+			buildConfigurationList = 7233CCCE195FD12300B5289D /* Build configuration list for PBXNativeTarget "Jah" */;
 			buildPhases = (
 				7233CC98195FD12300B5289D /* Sources */,
 				7233CC99195FD12300B5289D /* Frameworks */,
@@ -307,14 +307,14 @@
 			);
 			dependencies = (
 			);
-			name = PicYak;
+			name = Jah;
 			productName = PicYak;
-			productReference = 7233CC9C195FD12300B5289D /* PicYak.app */;
+			productReference = 7233CC9C195FD12300B5289D /* Jah.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7233CCBC195FD12300B5289D /* PicYakTests */ = {
+		7233CCBC195FD12300B5289D /* JahTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7233CCD1195FD12300B5289D /* Build configuration list for PBXNativeTarget "PicYakTests" */;
+			buildConfigurationList = 7233CCD1195FD12300B5289D /* Build configuration list for PBXNativeTarget "JahTests" */;
 			buildPhases = (
 				7233CCB9195FD12300B5289D /* Sources */,
 				7233CCBA195FD12300B5289D /* Frameworks */,
@@ -325,9 +325,9 @@
 			dependencies = (
 				7233CCC3195FD12300B5289D /* PBXTargetDependency */,
 			);
-			name = PicYakTests;
+			name = JahTests;
 			productName = PicYakTests;
-			productReference = 7233CCBD195FD12300B5289D /* PicYakTests.xctest */;
+			productReference = 7233CCBD195FD12300B5289D /* JahTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -347,7 +347,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7233CC97195FD12300B5289D /* Build configuration list for PBXProject "PicYak" */;
+			buildConfigurationList = 7233CC97195FD12300B5289D /* Build configuration list for PBXProject "Jah" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -358,40 +358,29 @@
 			mainGroup = 7233CC93195FD12300B5289D;
 			productRefGroup = 7233CC9D195FD12300B5289D /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = BE3D4A3B19661F47002F01D2 /* Products */;
-					ProjectRef = BE3D4A3A19661F47002F01D2 /* DLCImagePickerController.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
-				7233CC9B195FD12300B5289D /* PicYak */,
-				7233CCBC195FD12300B5289D /* PicYakTests */,
+				7233CC9B195FD12300B5289D /* Jah */,
+				7233CCBC195FD12300B5289D /* JahTests */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		BE3D4A4019661F47002F01D2 /* DLCImagePickerController.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = DLCImagePickerController.app;
-			remoteRef = BE3D4A3F19661F47002F01D2 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7233CC9A195FD12300B5289D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72C2FB54196BBCCE0083FD82 /* noComments.png in Resources */,
 				7233CCB8195FD12300B5289D /* Images.xcassets in Resources */,
+				72C2FB52196BB6650083FD82 /* empty.png in Resources */,
 				7233CD03196114C700B5289D /* downvoteArrow.png in Resources */,
+				72135C3A196A708B0057E95E /* downvoteArrowHighlighted.png in Resources */,
 				7233CCAA195FD12300B5289D /* InfoPlist.strings in Resources */,
+				7240CDB2196E624500E54944 /* camera44.png in Resources */,
+				72135C3B196A708B0057E95E /* upvoteArrowHighlighted.png in Resources */,
+				72135C40196AE5CE0057E95E /* clock.png in Resources */,
 				7233CD04196114C700B5289D /* upvoteArrow.png in Resources */,
-				BE3D4A361963B1FA002F01D2 /* Camera.png in Resources */,
 				7233CCB3195FD12300B5289D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,7 +427,7 @@
 /* Begin PBXTargetDependency section */
 		7233CCC3195FD12300B5289D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7233CC9B195FD12300B5289D /* PicYak */;
+			target = 7233CC9B195FD12300B5289D /* Jah */;
 			targetProxy = 7233CCC2195FD12300B5289D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -487,7 +476,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -505,6 +495,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "ABE99AC8-35A4-41C2-99B9-FDA8508F0A53";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -525,7 +516,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -536,6 +528,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				PROVISIONING_PROFILE = "ABE99AC8-35A4-41C2-99B9-FDA8508F0A53";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -546,18 +539,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PicYak",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PicYak/PicYak-Prefix.pch";
-				INFOPLIST_FILE = "PicYak/PicYak-Info.plist";
+				GCC_PREFIX_HEADER = "PicYak/Jah-Prefix.pch";
+				INFOPLIST_FILE = "PicYak/Jah-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PRODUCT_NAME = Jah;
+				PROVISIONING_PROFILE = "ABE99AC8-35A4-41C2-99B9-FDA8508F0A53";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -567,18 +560,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PicYak",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PicYak/PicYak-Prefix.pch";
-				INFOPLIST_FILE = "PicYak/PicYak-Info.plist";
+				GCC_PREFIX_HEADER = "PicYak/Jah-Prefix.pch";
+				INFOPLIST_FILE = "PicYak/Jah-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PRODUCT_NAME = Jah;
+				PROVISIONING_PROFILE = "ABE99AC8-35A4-41C2-99B9-FDA8508F0A53";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -598,8 +591,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "PicYakTests/PicYakTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "PicYakTests/JahTests-Info.plist";
+				PRODUCT_NAME = JahTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -616,39 +609,115 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PicYak/PicYak-Prefix.pch";
-				INFOPLIST_FILE = "PicYakTests/PicYakTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "PicYakTests/JahTests-Info.plist";
+				PRODUCT_NAME = JahTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
+		72C2FB58196BC5A40083FD82 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				PROVISIONING_PROFILE = "ABE99AC8-35A4-41C2-99B9-FDA8508F0A53";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Distribution;
+		};
+		72C2FB59196BC5A40083FD82 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Thomas Mignone (3Q6NJ58278)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PicYak",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PicYak/Jah-Prefix.pch";
+				INFOPLIST_FILE = "PicYak/Jah-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = Jah;
+				PROVISIONING_PROFILE = "ABE99AC8-35A4-41C2-99B9-FDA8508F0A53";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Distribution;
+		};
+		72C2FB5A196BC5A40083FD82 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PicYak.app/PicYak";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PicYak/PicYak-Prefix.pch";
+				INFOPLIST_FILE = "PicYakTests/JahTests-Info.plist";
+				PRODUCT_NAME = JahTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Distribution;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7233CC97195FD12300B5289D /* Build configuration list for PBXProject "PicYak" */ = {
+		7233CC97195FD12300B5289D /* Build configuration list for PBXProject "Jah" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7233CCCC195FD12300B5289D /* Debug */,
 				7233CCCD195FD12300B5289D /* Release */,
+				72C2FB58196BC5A40083FD82 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7233CCCE195FD12300B5289D /* Build configuration list for PBXNativeTarget "PicYak" */ = {
+		7233CCCE195FD12300B5289D /* Build configuration list for PBXNativeTarget "Jah" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7233CCCF195FD12300B5289D /* Debug */,
 				7233CCD0195FD12300B5289D /* Release */,
+				72C2FB59196BC5A40083FD82 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7233CCD1195FD12300B5289D /* Build configuration list for PBXNativeTarget "PicYakTests" */ = {
+		7233CCD1195FD12300B5289D /* Build configuration list for PBXNativeTarget "JahTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7233CCD2195FD12300B5289D /* Debug */,
 				7233CCD3195FD12300B5289D /* Release */,
+				72C2FB5A196BC5A40083FD82 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

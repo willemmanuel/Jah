@@ -32,137 +32,66 @@
 }
 
 - (IBAction)upvotePressed:(id)sender {
-    if (fetching)
+    NSString *shouldHighlight;
+    if (_delegate && [_delegate respondsToSelector:@selector(upvoteTapped:withCommentId:)]) {
+        shouldHighlight = [_delegate upvoteTapped:self withCommentId:self.comment.commentId];
+    }
+    if ([shouldHighlight isEqualToString:@"0"]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Connection Error" message:@"Internet Connection Failed." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]; [alert show];
         return;
-    fetching = YES;
-    //Look for a voter object with the devices unique identifier for the post
-    PFQuery *voteQuery = [PFQuery queryWithClassName:@"CommentVote"];
-    [voteQuery whereKey:@"comment" equalTo:self.comment.commentPFObject];
-    [voteQuery whereKey:@"userDeviceId" equalTo:[UIDevice currentDevice].identifierForVendor.UUIDString];
-    [voteQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (object) {
-            if ([object[@"upvote"] boolValue] == YES) {
-                [object delete];
-                int tempScore = [self.scoreLabel.text intValue];
-                tempScore-- ;
-                self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
-                
-                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-                [query getObjectInBackgroundWithId:self.comment.commentId block:^(PFObject *comment, NSError *error) {
-                    if (!error) {
-                        [comment incrementKey:@"score" byAmount:@-1];
-                        [comment save];
-                        fetching = NO;
-                    } else {
-                        fetching = NO;
-                    }
-                }];
-                
-            } else {
-                // changing from down to upvote
-                object[@"upvote"] = @YES;
-                [object save];
-                // Decrement score
-                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-                [query getObjectInBackgroundWithId:self.comment.commentId block:^(PFObject *post, NSError *error) {
-                    if (!error) {
-                        [post incrementKey:@"score" byAmount:@2];
-                        [post save];
-                        fetching = NO;
-                    } else {
-                        fetching = NO;
-                    }
-                }];
-                // Increment label
-                int tempScore = [self.scoreLabel.text intValue];
-                tempScore += 2;
-                self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
-            }
-        }
-        //Otherwise its their first time voting on this post so let them and save their vote
-        else {
-            int tempScore = [self.scoreLabel.text intValue];
-            tempScore++;
-            self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
-            PFObject *newCommentVote = [PFObject objectWithClassName:@"CommentVote"];
-            newCommentVote[@"comment"] = self.comment.commentPFObject;
-            newCommentVote[@"userDeviceId"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
-            newCommentVote[@"upvote"] = @YES;
-            [newCommentVote save];
-            PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-            PFObject *post = [query getObjectWithId:self.comment.commentId];
-            [post incrementKey:@"score"];
-            [post save];
-            fetching = NO;
-        }
-    }];
+    }
+    else if([shouldHighlight isEqualToString:@"1"]){
+        [self.upvoteButton setImage:[UIImage imageNamed:@"upvoteArrowHighlighted.png"] forState:UIControlStateNormal];
+        int tempScore = [self.scoreLabel.text intValue];
+        tempScore++;
+        self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+    }
+    else if([shouldHighlight isEqualToString:@"2"]){
+        [self.upvoteButton setImage:[UIImage imageNamed:@"upvoteArrow.png"] forState:UIControlStateNormal];
+        int tempScore = [self.scoreLabel.text intValue];
+        tempScore--;
+        self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+    }
+    else if([shouldHighlight isEqualToString:@"3"]){
+        [self.upvoteButton setImage:[UIImage imageNamed:@"upvoteArrowHighlighted.png"] forState:UIControlStateNormal];
+        [self.downvoteButton setImage:[UIImage imageNamed:@"downvoteArrow.png"] forState:UIControlStateNormal];
+        int tempScore = [self.scoreLabel.text intValue];
+        tempScore = tempScore + 2;
+        self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+    }
+    
+    
 }
 
 - (IBAction)downvotePressed:(id)sender {
-    if (fetching)
+    NSString *shouldHighlight;
+    if (_delegate && [_delegate respondsToSelector:@selector(downvoteTapped:withCommentId:)]) {
+        shouldHighlight = [_delegate downvoteTapped:self withCommentId:self.comment.commentId];
+    }
+    
+    if ([shouldHighlight isEqualToString:@"0"]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Connection Error" message:@"Internet Connection Failed." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]; [alert show];
         return;
-    fetching = YES;
-    //Look for a voter object with the devices unique identifier for the post
-    PFQuery *voteQuery = [PFQuery queryWithClassName:@"CommentVote"];
-    [voteQuery whereKey:@"comment" equalTo:self.comment.commentPFObject];
-    [voteQuery whereKey:@"userDeviceId" equalTo:[UIDevice currentDevice].identifierForVendor.UUIDString];
-    [voteQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (object) {
-            if ([object[@"upvote"] boolValue] == NO) {
-                [object delete];
-                int tempScore = [self.scoreLabel.text intValue];
-                tempScore++ ;
-                self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
-                
-                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-                [query getObjectInBackgroundWithId:self.comment.commentId block:^(PFObject *comment, NSError *error) {
-                    if (!error) {
-                        [comment incrementKey:@"score"];
-                        [comment save];
-                        fetching = NO;
-                    } else {
-                        fetching = NO;
-                    }
-                }];
-                
-            } else {
-                object[@"upvote"] = @NO;
-                [object save];
-                // Decrement score
-                PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-                [query getObjectInBackgroundWithId:self.comment.commentId block:^(PFObject *post, NSError *error) {
-                    if (!error) {
-                        [post incrementKey:@"score" byAmount:@-2];
-                        [post save];
-                        fetching = NO;
-                    } else {
-                        fetching = NO;
-                    }
-                }];
-                // Increment label
-                int tempScore = [self.scoreLabel.text intValue];
-                tempScore -= 2;
-                self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
-            }
-        }
-        //Otherwise its their first time voting on this post so let them and save their vote
-        else {
-            int tempScore = [self.scoreLabel.text intValue];
-            tempScore--;
-            self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
-            PFObject *newCommentVote = [PFObject objectWithClassName:@"CommentVote"];
-            newCommentVote[@"comment"] = self.comment.commentPFObject;
-            newCommentVote[@"userDeviceId"] = [UIDevice currentDevice].identifierForVendor.UUIDString;
-            newCommentVote[@"upvote"] = @NO;
-            [newCommentVote save];
-            PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
-            PFObject *post = [query getObjectWithId:self.comment.commentId];
-            [post incrementKey:@"score" byAmount:@-1];
-            [post save];
-            fetching = NO;
-        }
-    }];
+    }
+    else if([shouldHighlight isEqualToString:@"1"]){
+        [self.downvoteButton setImage:[UIImage imageNamed:@"downvoteArrowHighlighted.png"] forState:UIControlStateNormal];
+        int tempScore = [self.scoreLabel.text intValue];
+        tempScore--;
+        self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+    }
+    else if([shouldHighlight isEqualToString:@"2"]){
+        [self.downvoteButton setImage:[UIImage imageNamed:@"downvoteArrow.png"] forState:UIControlStateNormal];
+        int tempScore = [self.scoreLabel.text intValue];
+        tempScore++;
+        self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+    }
+    else if([shouldHighlight isEqualToString:@"3"]){
+        [self.downvoteButton setImage:[UIImage imageNamed:@"downvoteArrowHighlighted.png"] forState:UIControlStateNormal];
+        [self.upvoteButton setImage:[UIImage imageNamed:@"upvoteArrow.png"] forState:UIControlStateNormal];
+        int tempScore = [self.scoreLabel.text intValue];
+        tempScore = tempScore - 2;
+        self.scoreLabel.text = [NSString stringWithFormat:@"%d",tempScore];
+    }
 }
-
 
 @end

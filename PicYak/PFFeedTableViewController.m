@@ -10,18 +10,25 @@
 #import <math.h>
 #import "CommentsViewController.h"
 
+#import <sys/socket.h>
+#import <netinet/in.h>
+#import <arpa/inet.h>
+#import <netdb.h>
+#import <SystemConfiguration/SCNetworkReachability.h>
+
 @interface PFFeedTableViewController () {
     CLLocationManager *locationManager;
     CLLocation *currentLocation;
+    NSMutableArray *postVotes;
+    UIImageView *emptyFeedImage;
     NSString *uniqueDeviceIdentifier;
 }
 
 @end
 
 @implementation PFFeedTableViewController {
-    NSMutableArray *_objects;
-    NSMutableArray *_objectIDs;
-    NSDate *_oldestPost;
+    NSMutableArray *_newPosts;
+    NSMutableArray *_topPosts;
 }
 
 - (void)viewDidLoad
@@ -34,19 +41,26 @@
     [self.refreshControl addTarget:self action:@selector(refreshPulled) forControlEvents:UIControlEventValueChanged];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    _isLoading = NO;
-    _isRefreshing = NO;
-    _objects = [[NSMutableArray alloc] init];
-    _objectIDs = [[NSMutableArray alloc] init];
+    _newPostsAreLoading = NO;
+    _topPostsAreLoading = NO;
+    _newPostsAreRefreshing = NO;
+    _topPostsAreRefreshing = NO;
+    _processingVote = NO;
+    _newPosts = [[NSMutableArray alloc] init];
+    _topPosts = [[NSMutableArray alloc] init];
+    postVotes = [[NSMutableArray alloc] init];
     uniqueDeviceIdentifier = [UIDevice currentDevice].identifierForVendor.UUIDString;
     locationManager = [CLLocationManager new];
     locationManager.delegate = self;
     locationManager.distanceFilter = kCLDistanceFilterNone;
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
-    UIBarButtonItem *takePicture = [[UIBarButtonItem alloc]initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(newPost:)];
-    self.navigationItem.rightBarButtonItem = takePicture;
-    //[self loadObjects];
+
+    emptyFeedImage = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 420.0)];
+    [emptyFeedImage setImage:[UIImage imageNamed:@"empty.png"]];
+    emptyFeedImage.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:emptyFeedImage];
+    emptyFeedImage.hidden = YES;
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
@@ -54,16 +68,37 @@
 }
 
 -(void)refreshPulled {
-    if (_isLoading)
+    if (_newPostsAreLoading || _topPostsAreLoading)
         return;
     
     [locationManager startUpdatingLocation];
-    _isRefreshing = YES;
+    if(self.segmentedControl.selectedSegmentIndex == 0)
+    _newPostsAreRefreshing = YES;
+    else _topPostsAreRefreshing = YES;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [locationManager startUpdatingLocation];
+    
+}
+
+- (IBAction)segmentControlValueChanged:(id)sender {
+    // lazy load data for a segment choice (write this based on your data
+    NSLog(@"");
+    if(self.segmentedControl.selectedSegmentIndex == 0){
+        [self loadNewPosts];
+    }
+    else [self loadTopPosts];
+    
+    // reload data based on the new index
+    [self.tableView reloadData];
+    
+    // reset the scrolling to the top of the table view
+    if ([self tableView:self.tableView numberOfRowsInSection:0] > 0) {
+        NSIndexPath *topIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:topIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
 }
 
 - (PostTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -73,7 +108,11 @@
     if (cell == nil) {
         cell = [[PostTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    PFObject *object = (PFObject *)[_objects objectAtIndex:indexPath.row];
+    PFObject *object;
+    if(self.segmentedControl.selectedSegmentIndex == 0)
+    object = (PFObject *)[_newPosts objectAtIndex:indexPath.row];
+    else object = (PFObject *)[_topPosts objectAtIndex:indexPath.row];
+    
     Post *currentPost = [[Post alloc] initWithObject:object];
     cell.picture.image = currentPost.picture;
     cell.score.text = [NSString stringWithFormat:@"%d",currentPost.score];
@@ -89,18 +128,31 @@
     } else {
         cell.commentsLabel.text = [NSString stringWithFormat:@"%d replies", currentPost.comments];
     }
+    if([self shouldHighlightUpArrow:cell.post.postId]){
+        [cell.upvoteButton setImage:[UIImage imageNamed:@"upvoteArrowHighlighted.png"] forState:UIControlStateNormal];
+    }
+    else [cell.upvoteButton setImage:[UIImage imageNamed:@"upvoteArrow.png"] forState:UIControlStateNormal];
+    
+    if([self shouldHighlightDownArrow:cell.post.postId]){
+        [cell.downvoteButton setImage:[UIImage imageNamed:@"downvoteArrowHighlighted.png"] forState:UIControlStateNormal];
+    }
+    else [cell.downvoteButton setImage:[UIImage imageNamed:@"downvoteArrow.png"] forState:UIControlStateNormal];
+    
     return cell;
+    
 }
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_objects count];
+    if(self.segmentedControl.selectedSegmentIndex == 0)
+    return [_newPosts count];
+    else return [_topPosts count];
 }
 
 
-- (void)loadObjects
+- (void)loadNewPosts
 {
-    if (_isLoading)
+    if (_newPostsAreLoading)
         return;
-    
+    //[_newPosts removeAllObjects];
     PFGeoPoint *southWest = [self findPointWithDistance:5000.0 andBearing:225.0];
     PFGeoPoint *northEast = [self findPointWithDistance:5000.0 andBearing:45.0];
     
@@ -108,22 +160,20 @@
     [mainQuery whereKey:@"location" withinGeoBoxFromSouthwest:southWest toNortheast:northEast];
     [mainQuery orderByDescending:@"createdAt"];
     [mainQuery setLimit:6];
-    if(_isRefreshing){
+    if(_newPostsAreRefreshing){
         [mainQuery setSkip:0];
     }
-    else [mainQuery setSkip:_objects.count];
-    //[mainQuery setSkip:_objects.count];
-    _isLoading = YES;
+    else [mainQuery setSkip:_newPosts.count];
+    _newPostsAreLoading = YES;
     [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        _isLoading = NO;
-        if (_isRefreshing) {
-            [_objects removeAllObjects];
-            //[self.tableView reloadData];
-            _isRefreshing = NO;
+        _newPostsAreLoading = NO;
+        if (_newPostsAreRefreshing) {
+            [_newPosts removeAllObjects];
+            _newPostsAreRefreshing = NO;
         }
         if (!error) {
             for (PFObject *object in objects) {
-                [_objects addObject:object];
+                [_newPosts addObject:object];
             }
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
@@ -132,15 +182,73 @@
             NSLog(@"Error: %@ %@", error, [error userInfo]);
         }
         [self.refreshControl endRefreshing];
-        _isRefreshing = NO;
+        _newPostsAreRefreshing = NO;
+        if(_newPosts.count == 0)
+        {
+            emptyFeedImage.hidden = NO;
+        }
+        else emptyFeedImage.hidden = YES;
     }];
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row >= [_objects count]) {
-        return 0;
+- (void)loadTopPosts
+{
+    if (_topPostsAreLoading)
+        return;
+    //[_topPosts removeAllObjects];
+    PFGeoPoint *southWest = [self findPointWithDistance:5000.0 andBearing:225.0];
+    PFGeoPoint *northEast = [self findPointWithDistance:5000.0 andBearing:45.0];
+    
+    PFQuery *mainQuery = [PFQuery queryWithClassName:@"Post"];
+    [mainQuery whereKey:@"location" withinGeoBoxFromSouthwest:southWest toNortheast:northEast];
+    [mainQuery orderByDescending:@"score"];
+    [mainQuery setLimit:6];
+    if(_topPostsAreRefreshing){
+        [mainQuery setSkip:0];
     }
-    Post *currentPost = [[Post alloc] initWithObject:[_objects objectAtIndex:indexPath.row]];
+    else [mainQuery setSkip:_topPosts.count];
+    _topPostsAreLoading = YES;
+    [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        _topPostsAreLoading = NO;
+        if (_topPostsAreRefreshing) {
+            [_topPosts removeAllObjects];
+            _topPostsAreRefreshing = NO;
+        }
+        if (!error) {
+            for (PFObject *object in objects) {
+                [_topPosts addObject:object];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                [self.tableView reloadData];
+            });
+        } else {
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+        [self.refreshControl endRefreshing];
+        _topPostsAreRefreshing = NO;
+        if(_topPosts.count == 0)
+        {
+            emptyFeedImage.hidden = NO;
+        }
+        else emptyFeedImage.hidden = YES;
+    }];
+}
+
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    Post *currentPost;
+    if(self.segmentedControl.selectedSegmentIndex == 0){
+        if (indexPath.row >= [_newPosts count]) {
+            return 0;
+        }
+         currentPost = [[Post alloc] initWithObject:[_newPosts objectAtIndex:indexPath.row]];
+    }
+    else{
+        if (indexPath.row >= [_topPosts count]) {
+            return 0;
+        }
+        currentPost = [[Post alloc] initWithObject:[_topPosts objectAtIndex:indexPath.row]];
+    }
     CGSize constraint = CGSizeMake(280.0f, 20000.0f);
     CGSize size = [currentPost.caption sizeWithFont:[UIFont boldSystemFontOfSize:17.0] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
     return 280+30+3+25+size.height;
@@ -148,8 +256,12 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentSize.height - scrollView.contentOffset.y < (self.view.bounds.size.height)) {
-        if (!_isLoading) {
-            [self loadObjects];
+        if (self.segmentedControl.selectedSegmentIndex == 0 && !_newPostsAreLoading) {
+                [self loadNewPosts];
+            
+        }
+        if (self.segmentedControl.selectedSegmentIndex == 1 && !_topPostsAreLoading) {
+                [self loadTopPosts];
         }
     }
 }
@@ -181,23 +293,26 @@
 
 # pragma mark - targets
 
-- (IBAction)newPost:(id)sender{
-    [self performSegueWithIdentifier:@"pushDetails" sender:self];
-}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     currentLocation = [locations lastObject];
-    NSLog(@"%f, %f", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude);
-    //if (currentLocation.coordinate.longitude != 0 && currentLocation.coordinate.latitude != 0) {
     [locationManager stopUpdatingLocation];
-    //}
-    [self loadObjects];
+    if(self.segmentedControl.selectedSegmentIndex == 0)
+    [self loadNewPosts];
+    else [self loadTopPosts];
 }
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showComments"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        Post *currentPost = [[Post alloc] initWithObject:(PFObject *)[_objects objectAtIndex:indexPath.row]];
-        //CommentsTableViewController *destViewController = segue.destinationViewController;
-        //destViewController.post = currentPost;
+        Post *currentPost;
+        if(self.segmentedControl.selectedSegmentIndex == 0){
+            currentPost = [[Post alloc] initWithObject:(PFObject *)[_newPosts objectAtIndex:indexPath.row]];
+
+        }
+        else{
+            currentPost = [[Post alloc] initWithObject:(PFObject *)[_topPosts objectAtIndex:indexPath.row]];
+
+        }
         CommentsViewController *destViewController = segue.destinationViewController;
         destViewController.post = currentPost;
     }
@@ -213,18 +328,230 @@
     }
     return context;
 }
-
--(void)upvoteTapped:(PostTableViewCell*)cell {
+- (BOOL) shouldHighlightUpArrow:(NSString *)postId{
     NSManagedObjectContext *context = [self managedObjectContext];
-    NSManagedObject *newVote = [NSEntityDescription insertNewObjectForEntityForName:@"PostVote" inManagedObjectContext:context];
-    [newVote setValue:cell.post.postId forKey:@"post"];
-    [newVote setValue:@YES forKey:@"upvote"];
-}
-
--(void)downvoteTapped:(PostTableViewCell*)cell {
     
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"PostVote"];
+    postVotes = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    NSString *predicateString = [NSString stringWithFormat:@"post = '%@'", postId];
+    NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+    postVotes = [[postVotes filteredArrayUsingPredicate:testPredicate] mutableCopy];
+    
+    for (NSManagedObject *currentPost in postVotes) {
+        if([[currentPost valueForKey:@"upvote"]  isEqual: @1]){
+            return YES;
+        }
+        else return NO;
+    }
+    return NO;
+}
+- (BOOL) shouldHighlightDownArrow:(NSString *)postId{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"PostVote"];
+    postVotes = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    NSString *predicateString = [NSString stringWithFormat:@"post = '%@'", postId];
+    NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+    postVotes = [[postVotes filteredArrayUsingPredicate:testPredicate] mutableCopy];
+    
+    for (NSManagedObject *currentPost in postVotes) {
+        if([[currentPost valueForKey:@"upvote"]  isEqual: @0]){
+            return YES;
+        }
+        else return NO;
+    }
+    return NO;
+}
+//Returns 1 if it should highlight the button and increment the score by 1
+//Returns 2 if it should NOT highlight the button and decrement the score by 1
+//Returns 3 if it should highlight the button and increment the score by 2
+-  (NSString *) upvoteTapped:(id)sender withPostId:(NSString*)postId{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"PostVote"];
+    postVotes = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    NSString *predicateString = [NSString stringWithFormat:@"post = '%@'", postId];
+    NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+    postVotes = [[postVotes filteredArrayUsingPredicate:testPredicate] mutableCopy];
+    
+    // Look through all the postvotes for one with id == postId
+    //Nothing then upvote -> no results return from fetch for postId
+    if(!_processingVote){
+        _processingVote = YES;
+        if([self connectedToNetwork]){
+            if (postVotes.count == 0) {
+                //create new vote NSManagedObject with postId and upvote =1
+                NSManagedObject *newVote = [NSEntityDescription insertNewObjectForEntityForName:@"PostVote" inManagedObjectContext:context];
+                [newVote setValue:postId forKey:@"post"];
+                [newVote setValue:@YES forKey:@"upvote"];
+                NSError *error = nil;
+                if (![context save:&error]) {
+                    NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                }
+                else{
+                    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+                    [query getObjectInBackgroundWithId:postId block:^(PFObject *post, NSError *error) {
+                        [post incrementKey:@"score"];
+                        [post saveInBackground];
+                    }];
+                    _processingVote = NO;
+                    return @"1";
+                }
+            }
+            
+            else {
+                for (NSManagedObject *currentPost in postVotes) {
+                    //upvote then upvote -> one result found with upvote = 1
+                    if([[currentPost valueForKey:@"upvote"]  isEqual: @1]) {
+                        [context deleteObject:currentPost];
+                        NSError *error = nil;
+                        if (![context save:&error]) {
+                            NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                        }
+                        //decrement the score by 1
+                        PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+                        [query getObjectInBackgroundWithId:postId block:^(PFObject *post, NSError *error) {
+                            [post incrementKey:@"score" byAmount:@-1];
+                            [post saveInBackground];
+                        }];
+                        _processingVote = NO;
+                        return @"2";
+                    }
+                    //downvote then upvote -> one result found with upvote = 0
+                    //update the upvote field to YES
+                    //increment the score by 2
+                    else{
+                        [currentPost setValue:@YES forKey:@"upvote"];
+                        NSError *error = nil;
+                        if (![context save:&error]) {
+                            NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                        }
+                        PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+                        [query getObjectInBackgroundWithId:postId block:^(PFObject *post, NSError *error) {
+                            [post incrementKey:@"score" byAmount:@2];
+                            [post saveInBackground];
+                        }];
+                        _processingVote = NO;
+                        return @"3";
+                    }
+                }
+            }
+        }
+        else{
+            _processingVote = NO;
+            return @"0";
+        }
+    }
+    _processingVote = NO;
+    return @"0";
 }
 
+//Returns 1 if it should highlight the button and decrement the score by 1
+//Returns 2 if it should NOT highlight the button and increment the score by 1
+//Returns 3 if it should highlight the button and decrement the score by 2
+-  (NSString *) downvoteTapped:(id)sender withPostId:(NSString*)postId{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"PostVote"];
+    postVotes = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    NSString *predicateString = [NSString stringWithFormat:@"post = '%@'", postId];
+    NSPredicate *testPredicate = [NSPredicate predicateWithFormat:predicateString];
+    postVotes = [[postVotes filteredArrayUsingPredicate:testPredicate] mutableCopy];
+    
+    // Look through all the postvotes for one with id == postId
+    //Nothing then upvote -> no results return from fetch for postId
+    if(!_processingVote){
+        _processingVote = YES;
+        if([self connectedToNetwork]){
+            if (postVotes.count == 0) {
+                //create new vote NSManagedObject with postId and upvote =1
+                NSManagedObject *newVote = [NSEntityDescription insertNewObjectForEntityForName:@"PostVote" inManagedObjectContext:context];
+                [newVote setValue:postId forKey:@"post"];
+                [newVote setValue:@NO forKey:@"upvote"];
+                NSError *error = nil;
+                if (![context save:&error]) {
+                    NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                }
+                else{
+                    PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+                    [query getObjectInBackgroundWithId:postId block:^(PFObject *post, NSError *error) {
+                        [post incrementKey:@"score" byAmount:@-1];
+                        [post saveInBackground];
+                    }];
+                    _processingVote = NO;
+                    return @"1";
+                }
+            }
+            
+            else {
+                for (NSManagedObject *currentPost in postVotes) {
+                    //downvote then downvote -> one result found with upvote = 1
+                    if([[currentPost valueForKey:@"upvote"]  isEqual: @0]) {
+                        //delete this entry from core data
+                        [context deleteObject:currentPost];
+                        NSError *error = nil;
+                        if (![context save:&error]) {
+                            NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                        }
+                        //decrement the score by 1
+                        PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+                        [query getObjectInBackgroundWithId:postId block:^(PFObject *post, NSError *error) {
+                            [post incrementKey:@"score"];
+                            [post saveInBackground];
+                        }];
+                        _processingVote = NO;
+                        return @"2";
+                    }
+                    //downvote then upvote -> one result found with upvote = 0
+                    //update the upvote field to YES
+                    //increment the score by 2
+                    else{
+                        [currentPost setValue:@NO forKey:@"upvote"];
+                        NSError *error = nil;
+                        if (![context save:&error]) {
+                            NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+                        }
+                        PFQuery *query = [PFQuery queryWithClassName:@"Post"];
+                        [query getObjectInBackgroundWithId:postId block:^(PFObject *post, NSError *error) {
+                            [post incrementKey:@"score" byAmount:@-2];
+                            [post saveInBackground];
+                        }];
+                        _processingVote = NO;
+                        return @"3";
+                    }
+                }
+            }
+        }
+        else {
+            _processingVote = NO;
+            return @"0";
+        }
+    }
+    _processingVote = NO;
+    return @"0";
+}
 
+- (BOOL) connectedToNetwork
+{
+	// Create zero addy
+	struct sockaddr_in zeroAddress;
+	bzero(&zeroAddress, sizeof(zeroAddress));
+	zeroAddress.sin_len = sizeof(zeroAddress);
+	zeroAddress.sin_family = AF_INET;
+    
+	// Recover reachability flags
+	SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&zeroAddress);
+	SCNetworkReachabilityFlags flags;
+    
+	BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags);
+	CFRelease(defaultRouteReachability);
+    
+	if (!didRetrieveFlags)
+	{
+		return NO;
+	}
+    
+	BOOL isReachable = flags & kSCNetworkFlagsReachable;
+	BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
+	return (isReachable && !needsConnection) ? YES : NO;
+}
 @end
 
