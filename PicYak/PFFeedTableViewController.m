@@ -29,6 +29,7 @@
 @implementation PFFeedTableViewController {
     NSMutableArray *_newPosts;
     NSMutableArray *_topPosts;
+    NSMutableArray *_hotPosts;
 }
 
 - (void)viewDidLoad
@@ -43,11 +44,14 @@
     self.tableView.dataSource = self;
     _newPostsAreLoading = NO;
     _topPostsAreLoading = NO;
+    _hotPostsAreLoading = NO;
     _newPostsAreRefreshing = NO;
     _topPostsAreRefreshing = NO;
+    _hotPostsAreRefreshing = NO;
     _processingVote = NO;
     _newPosts = [[NSMutableArray alloc] init];
     _topPosts = [[NSMutableArray alloc] init];
+    _hotPosts = [[NSMutableArray alloc] init];
     postVotes = [[NSMutableArray alloc] init];
     uniqueDeviceIdentifier = [UIDevice currentDevice].identifierForVendor.UUIDString;
     locationManager = [CLLocationManager new];
@@ -68,13 +72,16 @@
 }
 
 -(void)refreshPulled {
-    if (_newPostsAreLoading || _topPostsAreLoading)
+    if (_newPostsAreLoading || _topPostsAreLoading || _hotPostsAreLoading)
         return;
     
     [locationManager startUpdatingLocation];
     if(self.segmentedControl.selectedSegmentIndex == 0)
-    _newPostsAreRefreshing = YES;
-    else _topPostsAreRefreshing = YES;
+        _newPostsAreRefreshing = YES;
+    else if (self.segmentedControl.selectedSegmentIndex == 1)
+        _hotPostsAreRefreshing = YES;
+    else
+        _topPostsAreRefreshing = YES;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -86,10 +93,12 @@
 - (IBAction)segmentControlValueChanged:(id)sender {
     // lazy load data for a segment choice (write this based on your data
     NSLog(@"");
-    if(self.segmentedControl.selectedSegmentIndex == 0){
+    if(self.segmentedControl.selectedSegmentIndex == 0)
         [self loadNewPosts];
-    }
-    else [self loadTopPosts];
+    else if(self.segmentedControl.selectedSegmentIndex == 1)
+        [self loadHotPosts];
+    else
+        [self loadTopPosts];
     
     // reload data based on the new index
     [self.tableView reloadData];
@@ -110,8 +119,11 @@
     }
     PFObject *object;
     if(self.segmentedControl.selectedSegmentIndex == 0)
-    object = (PFObject *)[_newPosts objectAtIndex:indexPath.row];
-    else object = (PFObject *)[_topPosts objectAtIndex:indexPath.row];
+        object = (PFObject *)[_newPosts objectAtIndex:indexPath.row];
+    else if(self.segmentedControl.selectedSegmentIndex == 1)
+        object = (PFObject *)[_hotPosts objectAtIndex:indexPath.row];
+    else
+        object = (PFObject *)[_topPosts objectAtIndex:indexPath.row];
     
     Post *currentPost = [[Post alloc] initWithObject:object];
     cell.picture.image = currentPost.picture;
@@ -143,8 +155,11 @@
 }
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if(self.segmentedControl.selectedSegmentIndex == 0)
-    return [_newPosts count];
-    else return [_topPosts count];
+        return [_newPosts count];
+    else if(self.segmentedControl.selectedSegmentIndex == 1)
+        return [_hotPosts count];
+    else
+        return [_topPosts count];
 }
 
 
@@ -234,6 +249,56 @@
     }];
 }
 
+// TODO: new hot posts
+- (void)loadHotPosts
+{
+    if (_hotPostsAreLoading)
+        return;
+    PFGeoPoint *southWest = [self findPointWithDistance:5000.0 andBearing:225.0];
+    PFGeoPoint *northEast = [self findPointWithDistance:5000.0 andBearing:45.0];
+    
+    // Find the date 1.5 days ago
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDate *now = [NSDate date];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    [components setDay:-1.5];
+    NSDate *twoDaysAgo = [gregorian dateByAddingComponents:components toDate:now options:0];
+    
+    PFQuery *mainQuery = [PFQuery queryWithClassName:@"Post"];
+    [mainQuery whereKey:@"location" withinGeoBoxFromSouthwest:southWest toNortheast:northEast];
+    [mainQuery orderByDescending:@"score"];
+    [mainQuery whereKey:@"createdAt" greaterThan:twoDaysAgo];
+    [mainQuery setLimit:6];
+    if(_hotPostsAreRefreshing){
+        [mainQuery setSkip:0];
+    }
+    else [mainQuery setSkip:_hotPosts.count];
+    _hotPostsAreLoading = YES;
+    [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        _hotPostsAreLoading = NO;
+        if (_hotPostsAreRefreshing) {
+            [_hotPosts removeAllObjects];
+            _hotPostsAreRefreshing = NO;
+        }
+        if (!error) {
+            for (PFObject *object in objects) {
+                [_hotPosts addObject:object];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                [self.tableView reloadData];
+            });
+        } else {
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+        [self.refreshControl endRefreshing];
+        _hotPostsAreRefreshing = NO;
+        if(_hotPosts.count == 0)
+        {
+            emptyFeedImage.hidden = NO;
+        }
+        else emptyFeedImage.hidden = YES;
+    }];
+}
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     Post *currentPost;
@@ -243,7 +308,13 @@
         }
          currentPost = [[Post alloc] initWithObject:[_newPosts objectAtIndex:indexPath.row]];
     }
-    else{
+    else if (self.segmentedControl.selectedSegmentIndex == 1){
+        if (indexPath.row >= [_hotPosts count]) {
+            return 0;
+        }
+        currentPost = [[Post alloc] initWithObject:[_hotPosts objectAtIndex:indexPath.row]];
+    }
+    else  {
         if (indexPath.row >= [_topPosts count]) {
             return 0;
         }
@@ -260,8 +331,11 @@
                 [self loadNewPosts];
             
         }
-        if (self.segmentedControl.selectedSegmentIndex == 1 && !_topPostsAreLoading) {
-                [self loadTopPosts];
+        if (self.segmentedControl.selectedSegmentIndex == 1 && !_hotPostsAreLoading) {
+            [self loadHotPosts];
+        }
+        if (self.segmentedControl.selectedSegmentIndex == 2 && !_topPostsAreLoading) {
+            [self loadTopPosts];
         }
     }
 }
@@ -298,8 +372,11 @@
     currentLocation = [locations lastObject];
     [locationManager stopUpdatingLocation];
     if(self.segmentedControl.selectedSegmentIndex == 0)
-    [self loadNewPosts];
-    else [self loadTopPosts];
+        [self loadNewPosts];
+    else if(self.segmentedControl.selectedSegmentIndex == 1)
+        [self loadHotPosts];
+    else
+        [self loadTopPosts];
 }
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showComments"]) {
@@ -307,11 +384,12 @@
         Post *currentPost;
         if(self.segmentedControl.selectedSegmentIndex == 0){
             currentPost = [[Post alloc] initWithObject:(PFObject *)[_newPosts objectAtIndex:indexPath.row]];
-
         }
-        else{
+        else if(self.segmentedControl.selectedSegmentIndex == 1) {
+            currentPost = [[Post alloc] initWithObject:(PFObject *)[_hotPosts objectAtIndex:indexPath.row]];
+        }
+        else  {
             currentPost = [[Post alloc] initWithObject:(PFObject *)[_topPosts objectAtIndex:indexPath.row]];
-
         }
         CommentsViewController *destViewController = segue.destinationViewController;
         destViewController.post = currentPost;

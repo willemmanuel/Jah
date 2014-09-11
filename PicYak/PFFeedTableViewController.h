@@ -16,8 +16,10 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (nonatomic) BOOL newPostsAreLoading;
 @property (nonatomic) BOOL topPostsAreLoading;
+@property (nonatomic) BOOL hotPostsAreLoading;
 @property (nonatomic) BOOL newPostsAreRefreshing;
 @property (nonatomic) BOOL topPostsAreRefreshing;
+@property (nonatomic) BOOL hotPostsAreRefreshing;
 @property (nonatomic) BOOL processingVote;
 
 @end
