@@ -181,12 +181,29 @@
        [self.captionTextField resignFirstResponder];
         return;
     }
-    UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:
-                            @"Take Photo",
-                            @"Choose Existing",
-                            nil];
-    popup.tag = 1;
-    [popup showInView:[UIApplication sharedApplication].keyWindow];
+    
+    // Commented out action sheet--just image taking with camera
+    
+//    UIActionSheet *popup = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:
+//                            @"Take Photo",
+//                            @"Choose Existing",
+//                            nil];
+//    popup.tag = 1;
+//    [popup showInView:[UIApplication sharedApplication].keyWindow];
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        imagePicker.showsCameraControls = YES;
+        imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+        imagePicker.delegate = self;
+        imagePicker.allowsEditing = YES;
+        [locationManager startUpdatingLocation];
+        [self presentViewController:imagePicker animated:YES completion:NULL];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Whoops" message:@"Camera not available Jah feel?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    
 }
 
 - (void)actionSheet:(UIActionSheet *)popup clickedButtonAtIndex:(NSInteger)buttonIndex {
